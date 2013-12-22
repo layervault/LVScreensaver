@@ -169,8 +169,6 @@ static NSString * const CLIENT_SECRET = @"4eaebeb997048e499033d41c6ef8b9b9966a05
     if (!url)
         return;
 
-    self.layer.sublayers = nil;
-
     NSImage *image = [[NSImage alloc] initWithContentsOfURL:url];
     CALayer *imageLayer = [self sublayerWithImage:image];
     [self.layer addSublayer:imageLayer];
@@ -180,6 +178,7 @@ static NSString * const CLIENT_SECRET = @"4eaebeb997048e499033d41c6ef8b9b9966a05
 }
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag {
+    self.layer.sublayers = nil;
     [self addedImage];
 }
 
