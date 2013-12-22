@@ -37,6 +37,10 @@ static NSString * const CLIENT_SECRET = @"4eaebeb997048e499033d41c6ef8b9b9966a05
         ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
 
         client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY secret:CLIENT_SECRET];
+        traverser = [[LVTraverser alloc] initWithClient:client
+                                               andWidth:[self bounds].size.width
+                                              andHeight:[self bounds].size.height];
+        traverser.delegate = self;
 
         if ([defaults stringForKey:@"Email"]) {
             [client authenticateWithEmail:[defaults stringForKey:@"Email"]
@@ -49,12 +53,6 @@ static NSString * const CLIENT_SECRET = @"4eaebeb997048e499033d41c6ef8b9b9966a05
 
                                        // Set Authorization Header
                                        [client setAuthorizationHeaderWithCredential:credential];
-
-                                       traverser = [[LVTraverser alloc] initWithClient:client
-                                                                              andWidth:[self bounds].size.width
-                                                                             andHeight:[self bounds].size.height];
-                                       traverser.delegate = self;
-
                                        [traverser fetchImagesNewerThan:thresholdDate];
                                    }
                                }];
