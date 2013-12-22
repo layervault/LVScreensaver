@@ -23,3 +23,4 @@ in your Podfile for the time being.
 - The screensaver itself is really slow, due to my hilariously inefficient `drawRect` method. Currentlyer searching CoreGraphics
 and OpenGL possibilities.
 - Currently not using Keychain Access to store user credentials. This app *will* store your LayerVault credentials in plain text.
+- There is currently no error state of the credentials (either OAuth or user) are invalid, neither at the screen saver level or at the input sheet level. 
