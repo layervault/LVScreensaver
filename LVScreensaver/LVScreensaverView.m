@@ -9,7 +9,10 @@
 #import "LVScreensaverView.h"
 
 #import <LayerVaultAPI.h>
+#import <QuartzCore/QuartzCore.h>
+
 #import "NSImage+ProportionalScaling.h"
+#import "NSImage+BitmapRepresentation.h"
 
 @implementation LVScreensaverView
 
@@ -18,18 +21,13 @@ static NSTimeInterval const FRAMES_PER_SECOND = 30.0;
 static NSTimeInterval const SECONDS_PER_DESIGN = 10.0;
 static NSTimeInterval const BLANK_SECONDS = 1.0;
 static NSTimeInterval const FADE_IN_SECONDS = 1.0;
-static NSString * const CLIENT_KEY = @"YOUR_CLIENT_KEY";
-static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
+static NSString * const CLIENT_KEY = @"3982595d69e86ec388b736e2be11a29ad0ab462153c0ee63dda3905c8373dce5";
+static NSString * const CLIENT_SECRET = @"4eaebeb997048e499033d41c6ef8b9b9966a051ce11f47d2f1de1d49a7205409";
 
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
-        tick = 0;
-        alpha = 0;
-        seconds = 0;
-        state = FadingIn;
-
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *lastWeekComponents = [[NSDateComponents alloc] init];
         NSDate *today = [NSDate date];
@@ -38,8 +36,7 @@ static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
 
         ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
 
-        client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY
-                                                  secret:CLIENT_SECRET];
+        client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY secret:CLIENT_SECRET];
 
         if ([defaults stringForKey:@"Email"]) {
             [client authenticateWithEmail:[defaults stringForKey:@"Email"]
@@ -52,7 +49,13 @@ static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
 
                                        // Set Authorization Header
                                        [client setAuthorizationHeaderWithCredential:credential];
-                                       [self fetchImagesNewerThan:thresholdDate];
+
+                                       traverser = [[LVTraverser alloc] initWithClient:client
+                                                                              andWidth:[self bounds].size.width
+                                                                             andHeight:[self bounds].size.height];
+                                       traverser.delegate = self;
+
+                                       [traverser fetchImagesNewerThan:thresholdDate];
                                    }
                                }];
 
@@ -60,9 +63,17 @@ static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
 
         imageURLs = [NSMutableSet new];
 
+        [self setWantsLayer:YES];
+        [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
         [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
     }
     return self;
+}
+
+- (void)addImageURL:(NSURL *)url
+{
+    [imageURLs addObject:url];
+    [self addedImage];
 }
 
 - (void)startAnimation
@@ -77,43 +88,12 @@ static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
 
 - (void)drawRect:(NSRect)rect
 {
-    [[NSColor blackColor] drawSwatchInRect:rect];
-
-    if (state == FadingIn) {
-        alpha = MIN(seconds / FADE_IN_SECONDS, 1.0);
-    }
-    else if (state == Normal) {
-        alpha = 1.0;
-    }
-    else if (state == FadingOut) {
-        alpha = MAX(1.0 - (seconds / FADE_IN_SECONDS), 0);
-    }
-
-    [[currentImage imageByScalingProportionallyToSize:[self bounds].size] drawInRect:rect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:alpha];
+    [super drawRect:rect];
 }
 
 - (void)animateOneFrame
 {
-    if (state == FadingIn && seconds > FADE_IN_SECONDS) {
-        tick = 0;
-        state = Normal;
-    }
-    else if (state == Normal && seconds > SECONDS_PER_DESIGN) {
-        tick = 0;
-        state = FadingOut;
-    }
-    else if (state == FadingOut && seconds > FADE_IN_SECONDS) {
-        tick = 0;
-        state = FadingIn;
-        currentImage = nil;
-        [self addedImage];
-    }
-
-    seconds = tick / FRAMES_PER_SECOND;
-    tick += 1;
-
     [self setNeedsDisplay:YES];
-    return;
     return;
 }
 
@@ -169,76 +149,38 @@ static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
                                [defaults setValue:emailField.stringValue forKey:@"Email"];
                                [defaults setValue:passwordField.stringValue forKey:@"Password"];
                                [defaults synchronize];
-                               [self fetchImagesNewerThan:thresholdDate];
+                               [traverser fetchImagesNewerThan:thresholdDate];
                            }
 
                           [[NSApplication sharedApplication] endSheet:configSheet];
-    }];
+                       }
+     ];
 }
 
-- (void)fetchImagesNewerThan:(NSDate *)date
-{
-    [client getMeWithCompletion:^(LVCUser *user,
-                                  NSError *error,
-                                  AFHTTPRequestOperation *operation) {
 
-        for (LVCProject *project in user.projects) {
-            [self descendIntoProject:project newerThan:date];
-        }
-
-    }];
-}
-
-- (void)descendIntoProject:(LVCProject *)project newerThan:(NSDate *)date
-{
-    if ([project.dateUpdated compare:date] != NSOrderedDescending)
-        return;
-
-    [client getProjectFromPartial:project completion:^(LVCProject *project, NSError *error, AFHTTPRequestOperation *operation) {
-        for (LVCFile *file in project.files)
-            [self descendIntoFile:file newerThan:date];
-
-        for (LVCFolder *folder in project.folders)
-            [self descendIntoFolder:folder newerThan:date];
-    }];
-}
-
-- (void)descendIntoFolder:(LVCFolder *)folder newerThan:(NSDate *)date
-{
-    if ([folder.dateUpdated compare:date] != NSOrderedDescending)
-        return;
-
-    for (LVCFile *file in folder.files)
-        [self descendIntoFile:file newerThan:date];
-
-    for (LVCFolder *subfolder in folder.folders)
-        [self descendIntoFolder:subfolder newerThan:date];
-}
-
-- (void)descendIntoFile:(LVCFile *)file newerThan:(NSDate *)date
-{
-    if ([file.dateUpdated compare:date] != NSOrderedDescending)
-        return;
-
-    [client getPreviewURLsForFile:file width:[self bounds].size.width height:[self bounds].size.height completion:^(NSArray *previewURLs, NSError *error, AFHTTPRequestOperation *operation) {
-        [imageURLs addObject:[previewURLs objectAtIndex:([previewURLs count] - 1)]];
-        [self addedImage];
-    }];
-}
 
 - (void)addedImage
 {
-    NSLog(@"Images %lu", (unsigned long)[imageURLs count]);
-    if (currentImage)
+    if (self.layer.sublayers.count)
         return;
 
     NSURL *url = [self randomImageURL];
-    NSLog(@"Setting image: %@", url);
 
     if (!url)
         return;
 
-    currentImage = [[NSImage alloc] initWithContentsOfURL:url];
+    self.layer.sublayers = nil;
+
+    NSImage *image = [[NSImage alloc] initWithContentsOfURL:url];
+    CALayer *imageLayer = [self sublayerWithImage:image];
+    [self.layer addSublayer:imageLayer];
+    [self.layer setNeedsDisplay];
+
+    [imageLayer addAnimation:[self fadeInFadeOut] forKey:@"animationGroup"];
+}
+
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag {
+    [self addedImage];
 }
 
 - (NSURL *)randomImageURL
@@ -248,6 +190,46 @@ static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
         return [[imageURLs allObjects] objectAtIndex:arc4random_uniform(myCount)];
     else
         return nil;
+}
+
+- (CAAnimationGroup *)fadeInFadeOut
+{
+    CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeInAnimation.fromValue = @0.0;
+    fadeInAnimation.toValue = @1.0;
+    fadeInAnimation.duration = FADE_IN_SECONDS;
+    fadeInAnimation.removedOnCompletion = NO;
+    fadeInAnimation.fillMode = kCAFillModeForwards;
+
+    CABasicAnimation *fadeOutAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeOutAnimation.fromValue = @1.0;
+    fadeOutAnimation.toValue = @0.0;
+    fadeOutAnimation.duration = FADE_IN_SECONDS;
+    fadeOutAnimation.removedOnCompletion = NO;
+    fadeOutAnimation.fillMode = kCAFillModeForwards;
+    fadeOutAnimation.beginTime = SECONDS_PER_DESIGN - FADE_IN_SECONDS;
+
+    CAAnimationGroup *group = [CAAnimationGroup animation];
+    group.duration = SECONDS_PER_DESIGN;
+    group.animations = @[fadeInAnimation, fadeOutAnimation];
+    group.delegate = self;
+
+    return group;
+}
+
+- (CALayer *)sublayerWithImage:(NSImage *)image
+{
+    CGImageRef ref = [[image bitmapImageRepresentation] CGImage];
+    CALayer *imageLayer = [[CALayer alloc] init];
+    NSSize containerSize = self.layer.bounds.size;
+
+    imageLayer.bounds = NSMakeRect(0, 0, image.size.width, image.size.height);
+    imageLayer.position = NSMakePoint((containerSize.width - image.size.width) / 2.0, (containerSize.height - image.size.height) / 2.0);
+    imageLayer.contents = (__bridge id)(ref);
+    imageLayer.opacity = 0.0;
+    imageLayer.anchorPoint = NSZeroPoint;
+
+    return imageLayer;
 }
 
 

@@ -10,6 +10,10 @@
 		4CFBC8D245334AA8912B5BCD /* libPods-LVScreensaver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 875350057F51425B81156B6B /* libPods-LVScreensaver.a */; };
 		A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */ = {isa = PBXBuildFile; fileRef = A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */; };
 		A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */ = {isa = PBXBuildFile; fileRef = A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */; };
+		A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */; };
+		A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */; };
+		A29355961866A6CB008C5CD9 /* LVTraverser.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355941866A6CB008C5CD9 /* LVTraverser.h */; };
+		A29355971866A6CB008C5CD9 /* LVTraverser.m in Sources */ = {isa = PBXBuildFile; fileRef = A29355951866A6CB008C5CD9 /* LVTraverser.m */; };
 		A29842D018662F6B00CDB2D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29842CF18662F6B00CDB2D8 /* Cocoa.framework */; };
 		A29842D218662F6B00CDB2D8 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29842D118662F6B00CDB2D8 /* ScreenSaver.framework */; };
 		A29842DC18662F6B00CDB2D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A29842DA18662F6B00CDB2D8 /* InfoPlist.strings */; };
@@ -23,6 +27,10 @@
 		875350057F51425B81156B6B /* libPods-LVScreensaver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LVScreensaver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+ProportionalScaling.h"; sourceTree = "<group>"; };
 		A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+ProportionalScaling.m"; sourceTree = "<group>"; };
+		A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+BitmapRepresentation.h"; sourceTree = "<group>"; };
+		A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+BitmapRepresentation.m"; sourceTree = "<group>"; };
+		A29355941866A6CB008C5CD9 /* LVTraverser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVTraverser.h; sourceTree = "<group>"; };
+		A29355951866A6CB008C5CD9 /* LVTraverser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVTraverser.m; sourceTree = "<group>"; };
 		A29842CC18662F6B00CDB2D8 /* LVScreensaver.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LVScreensaver.saver; sourceTree = BUILT_PRODUCTS_DIR; };
 		A29842CF18662F6B00CDB2D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		A29842D118662F6B00CDB2D8 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
@@ -59,6 +67,8 @@
 			children = (
 				A29842DE18662F6B00CDB2D8 /* LVScreensaverView.h */,
 				A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */,
+				A29355941866A6CB008C5CD9 /* LVTraverser.h */,
+				A29355951866A6CB008C5CD9 /* LVTraverser.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -76,6 +86,8 @@
 			children = (
 				A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */,
 				A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */,
+				A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */,
+				A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -150,6 +162,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */,
+				A29355961866A6CB008C5CD9 /* LVTraverser.h in Headers */,
+				A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,7 +279,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A29355971866A6CB008C5CD9 /* LVTraverser.m in Sources */,
 				A29842E018662F6B00CDB2D8 /* LVScreensaverView.m in Sources */,
+				A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */,
 				A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,6 +7,7 @@
 //
 
 #import <ScreenSaver/ScreenSaver.h>
+#import "LVTraverser.h"
 
 @class LVCHTTPClient;
 
@@ -16,7 +17,7 @@ typedef enum {
     FadingOut,
 } ScreenSaverStateType;
 
-@interface LVScreensaverView : ScreenSaverView
+@interface LVScreensaverView : ScreenSaverView <TraverserDelegate>
 {
     IBOutlet id configSheet;
     IBOutlet NSTextField *emailField;
@@ -25,11 +26,10 @@ typedef enum {
     LVCHTTPClient *client;
     NSMutableSet *imageURLs;
     NSDate *thresholdDate;
-    NSImage *currentImage;
-    NSInteger state;
-    NSInteger tick;
-    double alpha;
-    double seconds;
+
+    LVTraverser *traverser;
 }
+
+- (void)addImageURL:(NSURL *)url;
 
 @end
