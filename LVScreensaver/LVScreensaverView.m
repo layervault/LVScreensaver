@@ -21,8 +21,8 @@ static NSTimeInterval const FRAMES_PER_SECOND = 30.0;
 static NSTimeInterval const SECONDS_PER_DESIGN = 10.0;
 static NSTimeInterval const BLANK_SECONDS = 1.0;
 static NSTimeInterval const FADE_IN_SECONDS = 1.0;
-static NSString * const CLIENT_KEY = @"3982595d69e86ec388b736e2be11a29ad0ab462153c0ee63dda3905c8373dce5";
-static NSString * const CLIENT_SECRET = @"4eaebeb997048e499033d41c6ef8b9b9966a051ce11f47d2f1de1d49a7205409";
+static NSString * const CLIENT_KEY = @"YOUR_CLIENT_KEY";
+static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
