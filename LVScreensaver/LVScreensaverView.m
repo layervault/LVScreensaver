@@ -18,6 +18,8 @@ static NSTimeInterval const FRAMES_PER_SECOND = 30.0;
 static NSTimeInterval const SECONDS_PER_DESIGN = 10.0;
 static NSTimeInterval const BLANK_SECONDS = 1.0;
 static NSTimeInterval const FADE_IN_SECONDS = 1.0;
+static NSString * const CLIENT_KEY = @"YOUR_CLIENT_KEY";
+static NSString * const CLIENT_SECRET = @"YOUR_SECRET_KEY";
 
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
@@ -36,8 +38,8 @@ static NSTimeInterval const FADE_IN_SECONDS = 1.0;
 
         ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
 
-        client = [[LVCHTTPClient alloc] initWithClientID:@"YOUR_CLIENT_KEY"
-                                                  secret:@"YOUR_SECRET_KEY"];
+        client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY
+                                                  secret:CLIENT_SECRET];
 
         if ([defaults stringForKey:@"Email"]) {
             [client authenticateWithEmail:[defaults stringForKey:@"Email"]
