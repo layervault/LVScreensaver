@@ -70,17 +70,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A293558D18667660008C5CD9 /* Classes */ = {
+		A26329E81868D9AE00F77B7D /* LVAnimators */ = {
 			isa = PBXGroup;
 			children = (
-				A29842DE18662F6B00CDB2D8 /* LVScreensaverView.h */,
-				A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */,
-				A29355941866A6CB008C5CD9 /* LVTraverser.h */,
-				A29355951866A6CB008C5CD9 /* LVTraverser.m */,
 				A26329DE1868CF1500F77B7D /* LVAnimator.h */,
 				A26329E61868D01900F77B7D /* LVAnimator.m */,
 				A26329E21868CFA700F77B7D /* LVFadeAnimator.h */,
 				A26329E31868CFA700F77B7D /* LVFadeAnimator.m */,
+			);
+			name = LVAnimators;
+			sourceTree = "<group>";
+		};
+		A293558D18667660008C5CD9 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A26329E81868D9AE00F77B7D /* LVAnimators */,
+				A29842DE18662F6B00CDB2D8 /* LVScreensaverView.h */,
+				A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */,
+				A29355941866A6CB008C5CD9 /* LVTraverser.h */,
+				A29355951866A6CB008C5CD9 /* LVTraverser.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
