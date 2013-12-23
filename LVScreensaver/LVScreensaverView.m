@@ -59,11 +59,13 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 
         }
 
-        imageURLs = [NSMutableSet new];
-
         [self setWantsLayer:YES];
         [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
         [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
+
+        NSString *defaultImageName = isPreview ? @"Small-Logo" : @"Logo";
+        imageURLs = [NSMutableSet setWithObjects:[[NSBundle bundleForClass:[self class]] URLForImageResource:defaultImageName], nil];
+        [self addedImage];
     }
     return self;
 }
@@ -155,8 +157,6 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
      ];
 }
 
-
-
 - (void)addedImage
 {
     if (self.layer.sublayers.count)
@@ -172,7 +172,11 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
     [self.layer addSublayer:imageLayer];
     [self.layer setNeedsDisplay];
 
-    [imageLayer addAnimation:[self fadeInFadeOut] forKey:@"animationGroup"];
+    // Don't cycle images if we only have the starting image.
+    if ([imageURLs count] > 1)
+        [imageLayer addAnimation:[self fadeInFadeOut] forKey:@"animationGroup"];
+    else
+        imageLayer.opacity = 1.0;
 }
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag {

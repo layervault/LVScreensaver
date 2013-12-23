@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4CFBC8D245334AA8912B5BCD /* libPods-LVScreensaver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 875350057F51425B81156B6B /* libPods-LVScreensaver.a */; };
+		A26329DB1868C10000F77B7D /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A26329DA1868C10000F77B7D /* Logo.png */; };
+		A26329DD1868C91F00F77B7D /* Small-Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A26329DC1868C91F00F77B7D /* Small-Logo.png */; };
 		A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */ = {isa = PBXBuildFile; fileRef = A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */; };
 		A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */ = {isa = PBXBuildFile; fileRef = A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */; };
 		A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */; };
@@ -19,12 +21,12 @@
 		A29842DC18662F6B00CDB2D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A29842DA18662F6B00CDB2D8 /* InfoPlist.strings */; };
 		A29842E018662F6B00CDB2D8 /* LVScreensaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */; };
 		A29842EE18663E0F00CDB2D8 /* ConfigureSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = A29842ED18663E0F00CDB2D8 /* ConfigureSheet.xib */; };
-		A2E237BF18665D0E00002E0E /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E237BE18665D0E00002E0E /* Logo.png */; };
-		A2E237C2186661B800002E0E /* Logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E237C1186661B800002E0E /* Logo@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		875350057F51425B81156B6B /* libPods-LVScreensaver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LVScreensaver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A26329DA1868C10000F77B7D /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
+		A26329DC1868C91F00F77B7D /* Small-Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Small-Logo.png"; sourceTree = "<group>"; };
 		A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+ProportionalScaling.h"; sourceTree = "<group>"; };
 		A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+ProportionalScaling.m"; sourceTree = "<group>"; };
 		A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+BitmapRepresentation.h"; sourceTree = "<group>"; };
@@ -43,8 +45,6 @@
 		A29842DE18662F6B00CDB2D8 /* LVScreensaverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LVScreensaverView.h; sourceTree = "<group>"; };
 		A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LVScreensaverView.m; sourceTree = "<group>"; };
 		A29842ED18663E0F00CDB2D8 /* ConfigureSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigureSheet.xib; sourceTree = "<group>"; };
-		A2E237BE18665D0E00002E0E /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Logo.png; path = ../Logo.png; sourceTree = "<group>"; };
-		A2E237C1186661B800002E0E /* Logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Logo@2x.png"; path = "../Logo@2x.png"; sourceTree = "<group>"; };
 		DD0552C62ADA448D8024F354 /* Pods-LVScreensaver.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LVScreensaver.xcconfig"; path = "Pods/Pods-LVScreensaver.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,6 +76,8 @@
 		A293558E1866766B008C5CD9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A26329DC1868C91F00F77B7D /* Small-Logo.png */,
+				A26329DA1868C10000F77B7D /* Logo.png */,
 				A29842ED18663E0F00CDB2D8 /* ConfigureSheet.xib */,
 			);
 			name = Resources;
@@ -145,8 +147,6 @@
 		A29842D818662F6B00CDB2D8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A2E237BE18665D0E00002E0E /* Logo.png */,
-				A2E237C1186661B800002E0E /* Logo@2x.png */,
 				A29842D918662F6B00CDB2D8 /* LVScreensaver-Info.plist */,
 				A29842DA18662F6B00CDB2D8 /* InfoPlist.strings */,
 				A29842DD18662F6B00CDB2D8 /* LVScreensaver-Prefix.pch */,
@@ -222,10 +222,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A26329DD1868C91F00F77B7D /* Small-Logo.png in Resources */,
+				A26329DB1868C10000F77B7D /* Logo.png in Resources */,
 				A29842EE18663E0F00CDB2D8 /* ConfigureSheet.xib in Resources */,
-				A2E237C2186661B800002E0E /* Logo@2x.png in Resources */,
 				A29842DC18662F6B00CDB2D8 /* InfoPlist.strings in Resources */,
-				A2E237BF18665D0E00002E0E /* Logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
