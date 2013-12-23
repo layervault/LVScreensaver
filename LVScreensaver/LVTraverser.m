@@ -36,7 +36,6 @@
         for (LVCProject *project in user.projects) {
             [self descendIntoProject:project newerThan:date];
         }
-
     }];
 }
 

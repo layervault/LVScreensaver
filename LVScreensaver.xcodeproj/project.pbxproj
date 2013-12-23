@@ -10,6 +10,10 @@
 		4CFBC8D245334AA8912B5BCD /* libPods-LVScreensaver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 875350057F51425B81156B6B /* libPods-LVScreensaver.a */; };
 		A26329DB1868C10000F77B7D /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A26329DA1868C10000F77B7D /* Logo.png */; };
 		A26329DD1868C91F00F77B7D /* Small-Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A26329DC1868C91F00F77B7D /* Small-Logo.png */; };
+		A26329E01868CF1500F77B7D /* LVAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329DE1868CF1500F77B7D /* LVAnimator.h */; };
+		A26329E41868CFA700F77B7D /* LVFadeAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329E21868CFA700F77B7D /* LVFadeAnimator.h */; };
+		A26329E51868CFA700F77B7D /* LVFadeAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329E31868CFA700F77B7D /* LVFadeAnimator.m */; };
+		A26329E71868D01900F77B7D /* LVAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329E61868D01900F77B7D /* LVAnimator.m */; };
 		A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */ = {isa = PBXBuildFile; fileRef = A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */; };
 		A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */ = {isa = PBXBuildFile; fileRef = A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */; };
 		A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */; };
@@ -27,6 +31,10 @@
 		875350057F51425B81156B6B /* libPods-LVScreensaver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LVScreensaver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A26329DA1868C10000F77B7D /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
 		A26329DC1868C91F00F77B7D /* Small-Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Small-Logo.png"; sourceTree = "<group>"; };
+		A26329DE1868CF1500F77B7D /* LVAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVAnimator.h; sourceTree = "<group>"; };
+		A26329E21868CFA700F77B7D /* LVFadeAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVFadeAnimator.h; sourceTree = "<group>"; };
+		A26329E31868CFA700F77B7D /* LVFadeAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVFadeAnimator.m; sourceTree = "<group>"; };
+		A26329E61868D01900F77B7D /* LVAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVAnimator.m; sourceTree = "<group>"; };
 		A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+ProportionalScaling.h"; sourceTree = "<group>"; };
 		A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+ProportionalScaling.m"; sourceTree = "<group>"; };
 		A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+BitmapRepresentation.h"; sourceTree = "<group>"; };
@@ -69,6 +77,10 @@
 				A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */,
 				A29355941866A6CB008C5CD9 /* LVTraverser.h */,
 				A29355951866A6CB008C5CD9 /* LVTraverser.m */,
+				A26329DE1868CF1500F77B7D /* LVAnimator.h */,
+				A26329E61868D01900F77B7D /* LVAnimator.m */,
+				A26329E21868CFA700F77B7D /* LVFadeAnimator.h */,
+				A26329E31868CFA700F77B7D /* LVFadeAnimator.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -164,6 +176,8 @@
 				A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */,
 				A29355961866A6CB008C5CD9 /* LVTraverser.h in Headers */,
 				A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */,
+				A26329E01868CF1500F77B7D /* LVAnimator.h in Headers */,
+				A26329E41868CFA700F77B7D /* LVFadeAnimator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +297,8 @@
 				A29842E018662F6B00CDB2D8 /* LVScreensaverView.m in Sources */,
 				A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */,
 				A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */,
+				A26329E71868D01900F77B7D /* LVAnimator.m in Sources */,
+				A26329E51868CFA700F77B7D /* LVFadeAnimator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

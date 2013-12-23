@@ -10,7 +10,7 @@
 
 @class LVCHTTPClient;
 
-@protocol TraverserDelegate <NSObject>
+@protocol LVTraverserDelegate <NSObject>
 @required
 - (void)addImageURL:(NSURL *)url;
 @end
@@ -21,7 +21,7 @@
     CGFloat height;
 }
 
-@property (nonatomic, weak) id <TraverserDelegate> delegate;
+@property (nonatomic, weak) id <LVTraverserDelegate> delegate;
 
 - (id)initWithClient:(LVCHTTPClient *)aClient andWidth:(CGFloat)aWidth andHeight:(CGFloat)aHeight;
 - (void)fetchImagesNewerThan:(NSDate *)date;
