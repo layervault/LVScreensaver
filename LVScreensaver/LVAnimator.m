@@ -19,10 +19,14 @@
 
     if (self) {
         view = aView;
-        fadingLogoSlate = NO;
     }
 
     return self;
+}
+
+- (void)imageAdded:(NSURL *)imageURL
+{
+    
 }
 
 - (NSURL *)randomImageURL
@@ -35,51 +39,11 @@
         return nil;
 }
 
-- (CABasicAnimation *)fadeOutAnimation
-{
-    CABasicAnimation *fadeOutAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-
-    fadeOutAnimation.fromValue = @1.0;
-    fadeOutAnimation.toValue = @0.0;
-    fadeOutAnimation.duration = 1.0;
-    fadeOutAnimation.fillMode = kCAFillModeForwards;
-    fadeOutAnimation.removedOnCompletion = NO;
-    fadeOutAnimation.delegate = self;
-
-    return fadeOutAnimation;
-}
-
-// Idempotent method that will fade out the logo slate if it exists.
-- (BOOL)fadeOutLogoSlate:(void (^)(void))completion
-{
-    if (fadingLogoSlate)
-        return YES;
-
-    if (![self logoSlateExists])
-        return NO;
-
-    fadingLogoSlate = YES;
-    CALayer *logoSlate = [self logoSlate];
-    CABasicAnimation *fadeOut = [self fadeOutAnimation];
-
-    [CATransaction begin]; {
-        [CATransaction setCompletionBlock:^{
-            [[self logoSlate] removeFromSuperlayer];
-            view.layer.sublayers = nil;
-            [view.layer setNeedsDisplay];
-            completion();
-        }];
-        [logoSlate addAnimation:fadeOut forKey:@"fadeOut"];
-    } [CATransaction commit];
-
-    return YES;
-}
-
-- (CALayer *)logoSlate
+- (LVLogoLayer *)logoSlate
 {
     for (CALayer *layer in view.layer.sublayers) {
         if ([layer isMemberOfClass:[LVLogoLayer class]]) {
-            return layer;
+            return (LVLogoLayer *)layer;
         }
     }
 

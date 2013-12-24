@@ -8,6 +8,7 @@
 
 #import "LVFloatingAnimator.h"
 #import "LVImageLayer.h"
+#import "LVLogoLayer.h"
 
 #define ARC4RANDOM_MAX 0x100000000
 
@@ -35,11 +36,15 @@ static CGFloat const MAX_DEPTH = 200.0;
     if (!self.delegate)
         return;
 
-    double delay = [self fuzzedDelay] * NSEC_PER_SEC;
+    if ([self logoSlateExists]) {
+        [[self logoSlate] fadeOut:^{
+            [self imageAdded:imageURL];
+        }];
+    }
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, [self fuzzedDelay] * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageURL];
-        CALayer *imageLayer = [[LVImageLayer alloc] initWithImage:image andView:view];
+        LVImageLayer *imageLayer = [[LVImageLayer alloc] initWithImage:image andView:view];
         imageLayer.opacity = 1.0;
         imageLayer.position = NSMakePoint(0.0, view.layer.bounds.origin.y + view.layer.bounds.size.height);
 
@@ -100,6 +105,5 @@ static CGFloat const MAX_DEPTH = 200.0;
 {
     return ((double)arc4random() / ARC4RANDOM_MAX) * (MAX_DEPTH - MIN_DEPTH) + MIN_DEPTH;
 }
-
 
 @end

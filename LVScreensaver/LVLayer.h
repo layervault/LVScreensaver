@@ -9,8 +9,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ScreenSaver/ScreenSaver.h>
 
-@interface LVLayer : CALayer
+@interface LVLayer : CALayer {
+    BOOL fading;
+    ScreenSaverView *view;
+}
 
 - (id)initWithView:(ScreenSaverView *)view;
+- (BOOL)fadeOut:(void (^)(void))completion;
 
 @end

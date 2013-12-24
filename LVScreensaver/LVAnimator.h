@@ -10,6 +10,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ScreenSaver/ScreenSaver.h>
 
+@class LVLogoLayer;
+
 @protocol LVImageDelegate <NSObject>
 @required
 - (NSSet *)imageURLs;
@@ -17,7 +19,6 @@
 
 @interface LVAnimator : NSObject {
     ScreenSaverView *view;
-    BOOL fadingLogoSlate;
 }
 
 @property (nonatomic, weak) id <LVImageDelegate> delegate;
@@ -25,9 +26,9 @@
 - (id)initWithView:(ScreenSaverView *)view;
 - (void)imageAdded:(NSURL *)imageURL;
 - (NSURL *)randomImageURL;
-- (CABasicAnimation *)fadeOutAnimation;
 
 - (BOOL)logoSlateExists;
-- (BOOL)fadeOutLogoSlate:(void (^)(void))completion;
+- (LVLogoLayer *)logoSlate;
+- (void)stop;
 
 @end

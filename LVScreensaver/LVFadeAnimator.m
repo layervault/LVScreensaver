@@ -8,6 +8,7 @@
 
 #import "LVFadeAnimator.h"
 #import "LVImageLayer.h"
+#import "LVLogoLayer.h"
 
 @implementation LVFadeAnimator
 
@@ -17,12 +18,11 @@ static NSTimeInterval const FADE_IN_SECONDS = 1.0;
 
 - (void)imageAdded:(NSURL *)imageURL
 {
-    NSLog(@"yo yo yo %@", imageURL);
     if (!self.delegate)
         return;
 
     if ([self logoSlateExists]) {
-        [self fadeOutLogoSlate:^{
+        [[self logoSlate] fadeOut:^{
             [self imageAdded:imageURL];
         }];
         return;

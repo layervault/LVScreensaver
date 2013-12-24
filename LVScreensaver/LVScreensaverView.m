@@ -132,6 +132,8 @@ static NSInteger const MAX_IMAGES = 20;
                            [spinner setHidden:YES];
 
                            if (credential) {
+                               [self removeCredentialsLayer];
+
                                // Save Credential to Keychain
                                [AFOAuthCredential storeCredential:credential
                                                    withIdentifier:client.serviceProviderIdentifier];
@@ -141,7 +143,7 @@ static NSInteger const MAX_IMAGES = 20;
 
                                [config setEmail:emailField.stringValue];
                                [config setPassword:passwordField.stringValue];
-                               [self restart];
+                               [self start];
                            }
 
                           [[NSApplication sharedApplication] endSheet:configSheet];
@@ -163,6 +165,8 @@ static NSInteger const MAX_IMAGES = 20;
 - (void)stop
 {
     self.layer.sublayers = nil;
+    animator.delegate = nil;
+    animator = nil;
 }
 
 - (void)restart
@@ -173,7 +177,6 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (NSSet *)imageURLs
 {
-    NSLog(@"sup sup sup sup %@", _imageURLs);
     return [_imageURLs set];
 }
 
@@ -200,6 +203,8 @@ static NSInteger const MAX_IMAGES = 20;
                              password:[config password]
                            completion:^(AFOAuthCredential *credential, NSError *error) {
                                if (credential) {
+                                   [self removeCredentialsLayer];
+
                                    // Save Credential to Keychain
                                    [AFOAuthCredential storeCredential:credential
                                                        withIdentifier:client.serviceProviderIdentifier];
@@ -219,6 +224,15 @@ static NSInteger const MAX_IMAGES = 20;
     NSDate *today = [NSDate date];
     [lastWeekComponents setWeek:-1];
     thresholdDate = [calendar dateByAddingComponents:lastWeekComponents toDate:today options:0];
+}
+
+- (void)removeCredentialsLayer
+{
+    for (CALayer *layer in self.layer.sublayers) {
+        if ([layer isMemberOfClass:[LVCredentialTextLayer class]]) {
+            [(LVCredentialTextLayer *)layer fadeOut:^{}];
+        }
+    }
 }
 
 @end

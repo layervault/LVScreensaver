@@ -9,8 +9,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ScreenSaver/ScreenSaver.h>
 
-@interface LVTextLayer : CATextLayer
+@interface LVTextLayer : CATextLayer {
+    ScreenSaverView *view;
+    BOOL fading;
+}
 
 - (id)initWithView:(ScreenSaverView *)view;
+- (BOOL)fadeOut:(void (^)(void))completion;
 
 @end
