@@ -16,8 +16,16 @@
 		A26329E71868D01900F77B7D /* LVAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329E61868D01900F77B7D /* LVAnimator.m */; };
 		A26329EB1868DA9000F77B7D /* LVFloatingAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329E91868DA9000F77B7D /* LVFloatingAnimator.h */; };
 		A26329EC1868DA9000F77B7D /* LVFloatingAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329EA1868DA9000F77B7D /* LVFloatingAnimator.m */; };
-		A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */ = {isa = PBXBuildFile; fileRef = A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */; };
-		A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */ = {isa = PBXBuildFile; fileRef = A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */; };
+		A26329F3186940DC00F77B7D /* LVLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329F1186940DC00F77B7D /* LVLayer.h */; };
+		A26329F4186940DC00F77B7D /* LVLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329F2186940DC00F77B7D /* LVLayer.m */; };
+		A26329F8186940FC00F77B7D /* LVCredentialTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329F6186940FC00F77B7D /* LVCredentialTextLayer.h */; };
+		A26329F9186940FC00F77B7D /* LVCredentialTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329F7186940FC00F77B7D /* LVCredentialTextLayer.m */; };
+		A26329FC186942F600F77B7D /* LVTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329FA186942F600F77B7D /* LVTextLayer.h */; };
+		A26329FD186942F600F77B7D /* LVTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329FB186942F600F77B7D /* LVTextLayer.m */; };
+		A2632A00186943A500F77B7D /* LVLogoLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329FE186943A500F77B7D /* LVLogoLayer.h */; };
+		A2632A01186943A500F77B7D /* LVLogoLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329FF186943A500F77B7D /* LVLogoLayer.m */; };
+		A2632A041869452900F77B7D /* LVImageLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2632A021869452900F77B7D /* LVImageLayer.h */; };
+		A2632A051869452900F77B7D /* LVImageLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A2632A031869452900F77B7D /* LVImageLayer.m */; };
 		A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */; };
 		A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */; };
 		A29355961866A6CB008C5CD9 /* LVTraverser.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355941866A6CB008C5CD9 /* LVTraverser.h */; };
@@ -39,8 +47,16 @@
 		A26329E61868D01900F77B7D /* LVAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVAnimator.m; sourceTree = "<group>"; };
 		A26329E91868DA9000F77B7D /* LVFloatingAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVFloatingAnimator.h; sourceTree = "<group>"; };
 		A26329EA1868DA9000F77B7D /* LVFloatingAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVFloatingAnimator.m; sourceTree = "<group>"; };
-		A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+ProportionalScaling.h"; sourceTree = "<group>"; };
-		A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+ProportionalScaling.m"; sourceTree = "<group>"; };
+		A26329F1186940DC00F77B7D /* LVLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVLayer.h; sourceTree = "<group>"; };
+		A26329F2186940DC00F77B7D /* LVLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVLayer.m; sourceTree = "<group>"; };
+		A26329F6186940FC00F77B7D /* LVCredentialTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVCredentialTextLayer.h; sourceTree = "<group>"; };
+		A26329F7186940FC00F77B7D /* LVCredentialTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVCredentialTextLayer.m; sourceTree = "<group>"; };
+		A26329FA186942F600F77B7D /* LVTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVTextLayer.h; sourceTree = "<group>"; };
+		A26329FB186942F600F77B7D /* LVTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVTextLayer.m; sourceTree = "<group>"; };
+		A26329FE186943A500F77B7D /* LVLogoLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVLogoLayer.h; sourceTree = "<group>"; };
+		A26329FF186943A500F77B7D /* LVLogoLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVLogoLayer.m; sourceTree = "<group>"; };
+		A2632A021869452900F77B7D /* LVImageLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVImageLayer.h; sourceTree = "<group>"; };
+		A2632A031869452900F77B7D /* LVImageLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVImageLayer.m; sourceTree = "<group>"; };
 		A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+BitmapRepresentation.h"; sourceTree = "<group>"; };
 		A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+BitmapRepresentation.m"; sourceTree = "<group>"; };
 		A29355941866A6CB008C5CD9 /* LVTraverser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVTraverser.h; sourceTree = "<group>"; };
@@ -87,9 +103,27 @@
 			name = LVAnimators;
 			sourceTree = "<group>";
 		};
+		A26329F5186940DF00F77B7D /* LVLayers */ = {
+			isa = PBXGroup;
+			children = (
+				A26329F1186940DC00F77B7D /* LVLayer.h */,
+				A26329F2186940DC00F77B7D /* LVLayer.m */,
+				A26329F6186940FC00F77B7D /* LVCredentialTextLayer.h */,
+				A26329F7186940FC00F77B7D /* LVCredentialTextLayer.m */,
+				A26329FA186942F600F77B7D /* LVTextLayer.h */,
+				A26329FB186942F600F77B7D /* LVTextLayer.m */,
+				A26329FE186943A500F77B7D /* LVLogoLayer.h */,
+				A26329FF186943A500F77B7D /* LVLogoLayer.m */,
+				A2632A021869452900F77B7D /* LVImageLayer.h */,
+				A2632A031869452900F77B7D /* LVImageLayer.m */,
+			);
+			name = LVLayers;
+			sourceTree = "<group>";
+		};
 		A293558D18667660008C5CD9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A26329F5186940DF00F77B7D /* LVLayers */,
 				A26329E81868D9AE00F77B7D /* LVAnimators */,
 				A29842DE18662F6B00CDB2D8 /* LVScreensaverView.h */,
 				A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */,
@@ -112,8 +146,6 @@
 		A293558F18667672008C5CD9 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */,
-				A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */,
 				A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */,
 				A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */,
 			);
@@ -187,10 +219,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */,
+				A26329FC186942F600F77B7D /* LVTextLayer.h in Headers */,
 				A29355961866A6CB008C5CD9 /* LVTraverser.h in Headers */,
 				A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */,
 				A26329E01868CF1500F77B7D /* LVAnimator.h in Headers */,
+				A26329F8186940FC00F77B7D /* LVCredentialTextLayer.h in Headers */,
+				A26329F3186940DC00F77B7D /* LVLayer.h in Headers */,
+				A2632A041869452900F77B7D /* LVImageLayer.h in Headers */,
+				A2632A00186943A500F77B7D /* LVLogoLayer.h in Headers */,
 				A26329E41868CFA700F77B7D /* LVFadeAnimator.h in Headers */,
 				A26329EB1868DA9000F77B7D /* LVFloatingAnimator.h in Headers */,
 			);
@@ -308,11 +344,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A26329FD186942F600F77B7D /* LVTextLayer.m in Sources */,
 				A29355971866A6CB008C5CD9 /* LVTraverser.m in Sources */,
 				A29842E018662F6B00CDB2D8 /* LVScreensaverView.m in Sources */,
+				A2632A051869452900F77B7D /* LVImageLayer.m in Sources */,
 				A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */,
-				A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */,
+				A26329F4186940DC00F77B7D /* LVLayer.m in Sources */,
+				A26329F9186940FC00F77B7D /* LVCredentialTextLayer.m in Sources */,
 				A26329EC1868DA9000F77B7D /* LVFloatingAnimator.m in Sources */,
+				A2632A01186943A500F77B7D /* LVLogoLayer.m in Sources */,
 				A26329E71868D01900F77B7D /* LVAnimator.m in Sources */,
 				A26329E51868CFA700F77B7D /* LVFadeAnimator.m in Sources */,
 			);

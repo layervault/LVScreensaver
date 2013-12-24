@@ -8,9 +8,6 @@
 
 #import "LVAnimator.h"
 
-#import "NSImage+ProportionalScaling.h"
-#import "NSImage+BitmapRepresentation.h"
-
 @implementation LVAnimator
 
 @synthesize delegate;
@@ -35,21 +32,6 @@
         return [[[self.delegate imageURLs] allObjects] objectAtIndex:arc4random_uniform(myCount)];
     else
         return nil;
-}
-
-- (CALayer *)sublayerWithImage:(NSImage *)image
-{
-    CGImageRef ref = [[image bitmapImageRepresentation] CGImage];
-    CALayer *imageLayer = [[CALayer alloc] init];
-    NSSize containerSize = parentLayer.bounds.size;
-
-    imageLayer.bounds = NSMakeRect(0, 0, image.size.width, image.size.height);
-    imageLayer.position = NSMakePoint((containerSize.width - image.size.width) / 2.0, (containerSize.height - image.size.height) / 2.0);
-    imageLayer.contents = (__bridge id)(ref);
-    imageLayer.opacity = 0.0;
-    imageLayer.anchorPoint = NSZeroPoint;
-
-    return imageLayer;
 }
 
 - (CABasicAnimation *)fadeOutAnimation

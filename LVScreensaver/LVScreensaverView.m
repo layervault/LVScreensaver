@@ -10,6 +10,9 @@
 
 #import <LayerVaultAPI.h>
 
+#import "LVCredentialTextLayer.h"
+#import "LVLogoLayer.h"
+
 @implementation LVScreensaverView
 
 static NSString * const MyModuleName = @"com.layervault.LVScreensaver";
@@ -22,7 +25,12 @@ static NSInteger const MAX_IMAGES = 20;
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
-        [self reloadIsPreview:isPreview];
+        [self setWantsLayer:YES];
+        [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
+        [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
+        [self.layer addSublayer: [[LVLogoLayer alloc] initWithView:self]];
+        [self.layer addSublayer: [[LVCredentialTextLayer alloc] initWithView:self]];
+//        [self reloadIsPreview:isPreview];
     }
     
     return self;
@@ -159,10 +167,6 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (void)reloadIsPreview:(BOOL)isPreview
 {
-    [self setWantsLayer:YES];
-    [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
-    [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
-
     [self setupThresholdDate];
 
     NSString *defaultImageName = isPreview ? @"Small-Logo" : @"Logo";
