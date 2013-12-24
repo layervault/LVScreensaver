@@ -48,4 +48,10 @@
     return fadeOutAnimation;
 }
 
+// Idempotent method that will fade out the logo slate if it exists.
+- (void)fadeOutLogoSlate
+{
+
+}
+
 @end

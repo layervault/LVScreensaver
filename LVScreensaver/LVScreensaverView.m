@@ -12,6 +12,7 @@
 
 #import "LVCredentialTextLayer.h"
 #import "LVLogoLayer.h"
+#import "LVConfiguration.h"
 
 @implementation LVScreensaverView
 
@@ -25,12 +26,13 @@ static NSInteger const MAX_IMAGES = 20;
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
+        config = [[LVConfiguration alloc] init];
         [self setWantsLayer:YES];
         [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
         [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
-        [self.layer addSublayer: [[LVLogoLayer alloc] initWithView:self]];
-        [self.layer addSublayer: [[LVCredentialTextLayer alloc] initWithView:self]];
-//        [self reloadIsPreview:isPreview];
+        [self setupThresholdDate];
+
+        [self start];
     }
     
     return self;
@@ -92,32 +94,20 @@ static NSInteger const MAX_IMAGES = 20;
         }
     }
 
-    if (![defaults boolForKey:@"RiverMode"] && ![defaults boolForKey:@"SlideshowMode"]) {
-        [defaults setBool:YES forKey:@"RiverMode"];
-        [defaults synchronize];
-    }
+    if ([config email])
+        emailField.stringValue = [config email];
 
-    if ([defaults boolForKey:@"RiverMode"] && [defaults boolForKey:@"SlideshowMode"]) {
-        [defaults setBool:NO forKey:@"SlideshowMode"];
-        [defaults synchronize];
-    }
+    if ([config password])
+        passwordField.stringValue = [config password];
 
-    if ([defaults stringForKey:@"Email"])
-        emailField.stringValue = [defaults stringForKey:@"Email"];
-
-    if ([defaults stringForKey:@"Password"])
-        passwordField.stringValue = [defaults stringForKey:@"Password"];
-
-    if ([defaults boolForKey:@"RiverMode"]) {
+    if ([config isRiverMode]) {
         [riverMode setState:NSOnState];
         [slideshowMode setState:NSOffState];
     }
-
-    if ([defaults boolForKey:@"SlideshowMode"]) {
+    else if ([config isSlideshowMode]) {
         [riverMode setState:NSOffState];
         [slideshowMode setState:NSOnState];
     }
-
 
     return configSheet;
 }
@@ -131,14 +121,15 @@ static NSInteger const MAX_IMAGES = 20;
 {
     self.layer.sublayers = nil;
     [self.layer setNeedsDisplay];
-    ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
 
     [spinner setHidden:NO];
 
-    [defaults setBool:riverMode.state       forKey:@"RiverMode"];
-    [defaults setBool:slideshowMode.state   forKey:@"SlideshowMode"];
-    [defaults synchronize];
+    if (riverMode.state)
+        [config setRiverMode];
+    else if (slideshowMode.state)
+        [config setSlideshowMode];
 
+    [self stop];
     [client authenticateWithEmail:emailField.stringValue
                          password:passwordField.stringValue
                        completion:^(AFOAuthCredential *credential, NSError *error) {
@@ -152,29 +143,36 @@ static NSInteger const MAX_IMAGES = 20;
                                // Set Authorization Header
                                [client setAuthorizationHeaderWithCredential:credential];
 
-                               [defaults setValue:emailField.stringValue forKey:@"Email"];
-                               [defaults setValue:passwordField.stringValue forKey:@"Password"];
-                               [defaults synchronize];
-                               [traverser fetchImagesNewerThan:thresholdDate];
+                               [config setEmail:emailField.stringValue];
+                               [config setPassword:passwordField.stringValue];
+                               [self start];
                            }
 
                           [[NSApplication sharedApplication] endSheet:configSheet];
                        }
      ];
-
-    [self reloadIsPreview:YES];
 }
 
-- (void)reloadIsPreview:(BOOL)isPreview
+- (void)start
 {
-    [self setupThresholdDate];
+    [self.layer addSublayer: [[LVLogoLayer alloc] initWithView:self]];
 
-    NSString *defaultImageName = isPreview ? @"Small-Logo" : @"Logo";
-    defaultImageURL = [[NSBundle bundleForClass:[self class]] URLForImageResource:defaultImageName];
-    imageURLs = [[NSMutableOrderedSet alloc] initWithObject:defaultImageURL];
+    if (![config hasCredentials])
+        [self.layer addSublayer: [[LVCredentialTextLayer alloc] initWithView:self]];
 
     [self setupTraverser];
     [self setupAnimator];
+}
+
+- (void)stop
+{
+    self.layer.sublayers = nil;
+}
+
+- (void)restart
+{
+    [self stop];
+    [self start];
 }
 
 - (NSSet *)imageURLs
@@ -184,24 +182,9 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (void)setupAnimator
 {
-    ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
-
-    if (![defaults boolForKey:@"RiverMode"] && ![defaults boolForKey:@"SlideshowMode"]) {
-        [defaults setBool:YES forKey:@"RiverMode"];
-        [defaults synchronize];
-    }
-
-    if ([defaults boolForKey:@"RiverMode"] && [defaults boolForKey:@"SlideshowMode"]) {
-        [defaults setBool:NO forKey:@"SlideshowMode"];
-        [defaults synchronize];
-    }
-
-    self.layer.sublayers = nil;
-    [self.layer setNeedsDisplay];
-
-    if ([defaults boolForKey:@"RiverMode"])
+    if ([config isRiverMode])
         animator = [[LVFloatingAnimator alloc] initWithLayer:self.layer];
-    else if ([defaults boolForKey:@"SlideshowMode"])
+    else if ([config isSlideshowMode])
         animator = [[LVFadeAnimator alloc] initWithLayer:self.layer];
 
     animator.delegate = self;
@@ -210,17 +193,15 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (void)setupTraverser
 {
-    ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
-
     client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY secret:CLIENT_SECRET];
     traverser = [[LVTraverser alloc] initWithClient:client
                                            andWidth:[self bounds].size.width
                                           andHeight:[self bounds].size.height];
     traverser.delegate = self;
 
-    if ([defaults stringForKey:@"Email"]) {
-        [client authenticateWithEmail:[defaults stringForKey:@"Email"]
-                             password:[defaults stringForKey:@"Password"]
+    if ([config hasCredentials]) {
+        [client authenticateWithEmail:[config email]
+                             password:[config password]
                            completion:^(AFOAuthCredential *credential, NSError *error) {
                                if (credential) {
                                    // Save Credential to Keychain

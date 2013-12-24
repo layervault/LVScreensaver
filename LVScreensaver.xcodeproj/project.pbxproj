@@ -26,6 +26,8 @@
 		A2632A01186943A500F77B7D /* LVLogoLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329FF186943A500F77B7D /* LVLogoLayer.m */; };
 		A2632A041869452900F77B7D /* LVImageLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2632A021869452900F77B7D /* LVImageLayer.h */; };
 		A2632A051869452900F77B7D /* LVImageLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A2632A031869452900F77B7D /* LVImageLayer.m */; };
+		A2632A08186949A200F77B7D /* LVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = A2632A06186949A200F77B7D /* LVConfiguration.h */; };
+		A2632A09186949A200F77B7D /* LVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A2632A07186949A200F77B7D /* LVConfiguration.m */; };
 		A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */; };
 		A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */; };
 		A29355961866A6CB008C5CD9 /* LVTraverser.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355941866A6CB008C5CD9 /* LVTraverser.h */; };
@@ -57,6 +59,8 @@
 		A26329FF186943A500F77B7D /* LVLogoLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVLogoLayer.m; sourceTree = "<group>"; };
 		A2632A021869452900F77B7D /* LVImageLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVImageLayer.h; sourceTree = "<group>"; };
 		A2632A031869452900F77B7D /* LVImageLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVImageLayer.m; sourceTree = "<group>"; };
+		A2632A06186949A200F77B7D /* LVConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVConfiguration.h; sourceTree = "<group>"; };
+		A2632A07186949A200F77B7D /* LVConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVConfiguration.m; sourceTree = "<group>"; };
 		A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+BitmapRepresentation.h"; sourceTree = "<group>"; };
 		A29355911866986F008C5CD9 /* NSImage+BitmapRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+BitmapRepresentation.m"; sourceTree = "<group>"; };
 		A29355941866A6CB008C5CD9 /* LVTraverser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVTraverser.h; sourceTree = "<group>"; };
@@ -129,6 +133,8 @@
 				A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */,
 				A29355941866A6CB008C5CD9 /* LVTraverser.h */,
 				A29355951866A6CB008C5CD9 /* LVTraverser.m */,
+				A2632A06186949A200F77B7D /* LVConfiguration.h */,
+				A2632A07186949A200F77B7D /* LVConfiguration.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -221,6 +227,7 @@
 			files = (
 				A26329FC186942F600F77B7D /* LVTextLayer.h in Headers */,
 				A29355961866A6CB008C5CD9 /* LVTraverser.h in Headers */,
+				A2632A08186949A200F77B7D /* LVConfiguration.h in Headers */,
 				A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */,
 				A26329E01868CF1500F77B7D /* LVAnimator.h in Headers */,
 				A26329F8186940FC00F77B7D /* LVCredentialTextLayer.h in Headers */,
@@ -346,6 +353,7 @@
 			files = (
 				A26329FD186942F600F77B7D /* LVTextLayer.m in Sources */,
 				A29355971866A6CB008C5CD9 /* LVTraverser.m in Sources */,
+				A2632A09186949A200F77B7D /* LVConfiguration.m in Sources */,
 				A29842E018662F6B00CDB2D8 /* LVScreensaverView.m in Sources */,
 				A2632A051869452900F77B7D /* LVImageLayer.m in Sources */,
 				A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */,

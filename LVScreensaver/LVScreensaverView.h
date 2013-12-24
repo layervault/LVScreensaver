@@ -12,6 +12,7 @@
 #import "LVFloatingAnimator.h"
 
 @class LVCHTTPClient;
+@class LVConfiguration;
 
 typedef enum {
     FadingIn,
@@ -37,6 +38,8 @@ typedef enum {
     LVTraverser *traverser;
     LVAnimator *animator;
     NSURL *defaultImageURL;
+
+    LVConfiguration *config;
 }
 
 - (void)addImageURL:(NSURL *)url;
