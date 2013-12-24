@@ -37,6 +37,8 @@
 		A29842DC18662F6B00CDB2D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A29842DA18662F6B00CDB2D8 /* InfoPlist.strings */; };
 		A29842E018662F6B00CDB2D8 /* LVScreensaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */; };
 		A29842EE18663E0F00CDB2D8 /* ConfigureSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = A29842ED18663E0F00CDB2D8 /* ConfigureSheet.xib */; };
+		A2A53E20186A34E400615E3F /* thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A53E1E186A34E400615E3F /* thumbnail.png */; };
+		A2A53E21186A34E400615E3F /* thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A53E1F186A34E400615E3F /* thumbnail@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +79,8 @@
 		A29842DE18662F6B00CDB2D8 /* LVScreensaverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LVScreensaverView.h; sourceTree = "<group>"; };
 		A29842DF18662F6B00CDB2D8 /* LVScreensaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LVScreensaverView.m; sourceTree = "<group>"; };
 		A29842ED18663E0F00CDB2D8 /* ConfigureSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigureSheet.xib; sourceTree = "<group>"; };
+		A2A53E1E186A34E400615E3F /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = "<group>"; };
+		A2A53E1F186A34E400615E3F /* thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbnail@2x.png"; sourceTree = "<group>"; };
 		DD0552C62ADA448D8024F354 /* Pods-LVScreensaver.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LVScreensaver.xcconfig"; path = "Pods/Pods-LVScreensaver.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -142,6 +146,8 @@
 		A293558E1866766B008C5CD9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A2A53E1E186A34E400615E3F /* thumbnail.png */,
+				A2A53E1F186A34E400615E3F /* thumbnail@2x.png */,
 				A26329DC1868C91F00F77B7D /* Small-Logo.png */,
 				A26329DA1868C10000F77B7D /* Logo.png */,
 				A29842ED18663E0F00CDB2D8 /* ConfigureSheet.xib */,
@@ -298,6 +304,8 @@
 				A26329DB1868C10000F77B7D /* Logo.png in Resources */,
 				A29842EE18663E0F00CDB2D8 /* ConfigureSheet.xib in Resources */,
 				A29842DC18662F6B00CDB2D8 /* InfoPlist.strings in Resources */,
+				A2A53E20186A34E400615E3F /* thumbnail.png in Resources */,
+				A2A53E21186A34E400615E3F /* thumbnail@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
