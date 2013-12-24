@@ -77,17 +77,32 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
         }
     }
 
+    if (![defaults boolForKey:@"RiverMode"] && ![defaults boolForKey:@"SlideshowMode"]) {
+        [defaults setBool:YES forKey:@"RiverMode"];
+        [defaults synchronize];
+    }
+
+    if ([defaults boolForKey:@"RiverMode"] && [defaults boolForKey:@"SlideshowMode"]) {
+        [defaults setBool:NO forKey:@"SlideshowMode"];
+        [defaults synchronize];
+    }
+
     if ([defaults stringForKey:@"Email"])
         emailField.stringValue = [defaults stringForKey:@"Email"];
 
     if ([defaults stringForKey:@"Password"])
         passwordField.stringValue = [defaults stringForKey:@"Password"];
 
-    if ([defaults integerForKey:@"RiverMode"])
+    if ([defaults boolForKey:@"RiverMode"]) {
         [riverMode setState:NSOnState];
+        [slideshowMode setState:NSOffState];
+    }
 
-    if ([defaults integerForKey:@"SlideshowMode"])
+    if ([defaults boolForKey:@"SlideshowMode"]) {
+        [riverMode setState:NSOffState];
         [slideshowMode setState:NSOnState];
+    }
+
 
     return configSheet;
 }
@@ -162,6 +177,11 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 
     if (![defaults boolForKey:@"RiverMode"] && ![defaults boolForKey:@"SlideshowMode"]) {
         [defaults setBool:YES forKey:@"RiverMode"];
+        [defaults synchronize];
+    }
+
+    if ([defaults boolForKey:@"RiverMode"] && [defaults boolForKey:@"SlideshowMode"]) {
+        [defaults setBool:NO forKey:@"SlideshowMode"];
         [defaults synchronize];
     }
 
