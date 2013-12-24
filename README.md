@@ -18,5 +18,4 @@ Set your LayerVault user name and password by clicking "Screen Saver Options..."
 ## Notes
 
 - Currently not using Keychain Access to store user credentials. This app *will* store your LayerVault credentials in plain text.
-- There is currently no error state of the credentials (either OAuth or user) are invalid, neither at the screen saver level or at the input sheet level. 
 - The polling mechanism is a bit dumb, and could start overlapping responses if: the user has a lot of projects or if the responses for each project is slow. We should collect the responses before issues a new top-level request.
