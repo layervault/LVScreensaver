@@ -7,6 +7,7 @@
 //
 
 #import "LVFloatingAnimator.h"
+#import "LVImageLayer.h"
 
 #define ARC4RANDOM_MAX 0x100000000
 
@@ -18,9 +19,9 @@ static CGFloat const MAX_SCALE = 0.9;
 static CGFloat const MIN_DEPTH = -200.0;
 static CGFloat const MAX_DEPTH = 200.0;
 
-- (id)initWithLayer:(CALayer *)layer
+- (id)initWithView:(ScreenSaverView *)aView
 {
-    self = [super initWithLayer:layer];
+    self = [super initWithView:aView];
 
     if (self) {
         currentLayers = [NSMutableSet set];
@@ -38,18 +39,18 @@ static CGFloat const MAX_DEPTH = 200.0;
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay), dispatch_get_main_queue(), ^{
         NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageURL];
-        CALayer *imageLayer = [self sublayerWithImage:image];
+        CALayer *imageLayer = [[LVImageLayer alloc] initWithImage:image andView:view];
         imageLayer.opacity = 1.0;
-        imageLayer.position = NSMakePoint(0.0, parentLayer.bounds.origin.y + parentLayer.bounds.size.height);
+        imageLayer.position = NSMakePoint(0.0, view.layer.bounds.origin.y + view.layer.bounds.size.height);
 
         CGFloat randomScale = [self randomScale];
-        CGFloat randomXOffset = arc4random_uniform(parentLayer.bounds.size.width);
+        CGFloat randomXOffset = arc4random_uniform(view.layer.bounds.size.width);
         CGFloat randomDepth = [self randomDepth];
         imageLayer.transform = CATransform3DConcat(CATransform3DMakeTranslation(randomXOffset, 0.0, randomDepth),
                                                    CATransform3DMakeScale(randomScale, randomScale, 1.0));
 
-        [parentLayer addSublayer:imageLayer];
-        [parentLayer setNeedsDisplay];
+        [view.layer addSublayer:imageLayer];
+        [view.layer setNeedsDisplay];
 
         [imageLayer addAnimation:[self animateDownTheScreen] forKey:@"position"];
     });
@@ -59,7 +60,7 @@ static CGFloat const MAX_DEPTH = 200.0;
 {
     CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
 
-    positionAnimation.toValue = [NSNumber numberWithFloat: -2 * (parentLayer.bounds.origin.y + parentLayer.bounds.size.height)];
+    positionAnimation.toValue = [NSNumber numberWithFloat: -2 * (view.layer.bounds.origin.y + view.layer.bounds.size.height)];
     positionAnimation.duration = TRANSLATE_DURATION;
     positionAnimation.removedOnCompletion = NO;
     positionAnimation.delegate = self;

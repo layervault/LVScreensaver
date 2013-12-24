@@ -7,6 +7,7 @@
 //
 
 #import "LVFadeAnimator.h"
+#import "LVImageLayer.h"
 
 @implementation LVFadeAnimator
 
@@ -16,37 +17,37 @@ static NSTimeInterval const FADE_IN_SECONDS = 1.0;
 
 - (void)imageAdded:(NSURL *)imageURL
 {
+    NSLog(@"yo yo yo %@", imageURL);
     if (!self.delegate)
         return;
 
-    if (parentLayer.sublayers.count) {
-        CALayer *sublayer = [parentLayer.sublayers firstObject];
-
-        // If our sublayer does not have an animation applied, it is the starting slate for the
-        // screensaver. We then apply an animation to remove the slate.
-        if ([[sublayer animationKeys] count] == 0) {
-            [sublayer addAnimation:[self fadeOutAnimation] forKey:@"fadeOutAnimation"];
-        }
-
+    if ([self logoSlateExists]) {
+        [self fadeOutLogoSlate:^{
+            [self imageAdded:imageURL];
+        }];
         return;
     }
 
+    if ([view.layer.sublayers count] > 0)
+        return;
+
+    [self displayNewImage];
+}
+
+- (void)displayNewImage
+{
     NSURL *url = [self randomImageURL];
 
     if (!url)
         return;
 
     NSImage *image = [[NSImage alloc] initWithContentsOfURL:url];
-    CALayer *imageLayer = [self sublayerWithImage:image];
-    [parentLayer addSublayer:imageLayer];
-    [parentLayer setNeedsDisplay];
+    CALayer *imageLayer = [[LVImageLayer alloc] initWithImage:image andView:view];
+    [view.layer addSublayer:imageLayer];
+    [view.layer setNeedsDisplay];
 
-    // Don't cycle images if we only have the starting image.
-    if ([[self.delegate imageURLs] count] > 1)
-        [imageLayer addAnimation:[self animation] forKey:@"animationGroup"];
-    else
-        imageLayer.opacity = 1.0;
-
+    NSLog(@"Going to display image with URL %@", url);
+    [imageLayer addAnimation:[self animation] forKey:@"animationGroup"];
 }
 
 - (CAAnimationGroup *)animation
@@ -76,7 +77,7 @@ static NSTimeInterval const FADE_IN_SECONDS = 1.0;
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-    parentLayer.sublayers = nil;
+    view.layer.sublayers = nil;
     [self imageAdded:nil];
 }
 

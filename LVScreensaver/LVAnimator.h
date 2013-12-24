@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
+#import <ScreenSaver/ScreenSaver.h>
 
 @protocol LVImageDelegate <NSObject>
 @required
@@ -15,15 +16,18 @@
 @end
 
 @interface LVAnimator : NSObject {
-    CALayer *parentLayer;
+    ScreenSaverView *view;
+    BOOL fadingLogoSlate;
 }
 
 @property (nonatomic, weak) id <LVImageDelegate> delegate;
 
-- (id)initWithLayer:(CALayer *)layer;
+- (id)initWithView:(ScreenSaverView *)view;
 - (void)imageAdded:(NSURL *)imageURL;
 - (NSURL *)randomImageURL;
-- (CALayer *)sublayerWithImage:(NSImage *)image;
 - (CABasicAnimation *)fadeOutAnimation;
+
+- (BOOL)logoSlateExists;
+- (BOOL)fadeOutLogoSlate:(void (^)(void))completion;
 
 @end

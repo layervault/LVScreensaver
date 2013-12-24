@@ -14,12 +14,6 @@
 @class LVCHTTPClient;
 @class LVConfiguration;
 
-typedef enum {
-    FadingIn,
-    Normal,
-    FadingOut,
-} ScreenSaverStateType;
-
 @interface LVScreensaverView : ScreenSaverView <LVTraverserDelegate, LVImageDelegate>
 {
     IBOutlet id configSheet;
@@ -32,7 +26,7 @@ typedef enum {
     IBOutlet NSButtonCell *slideshowMode;
 
     LVCHTTPClient *client;
-    NSMutableOrderedSet *imageURLs;
+    NSMutableOrderedSet *_imageURLs;
     NSDate *thresholdDate;
 
     LVTraverser *traverser;
@@ -43,5 +37,6 @@ typedef enum {
 }
 
 - (void)addImageURL:(NSURL *)url;
+- (NSSet *)imageURLs;
 
 @end

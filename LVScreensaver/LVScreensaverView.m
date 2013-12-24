@@ -26,6 +26,7 @@ static NSInteger const MAX_IMAGES = 20;
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
+        _imageURLs = [[NSMutableOrderedSet alloc] init];
         config = [[LVConfiguration alloc] init];
         [self setWantsLayer:YES];
         [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
@@ -40,19 +41,14 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (void)addImageURL:(NSURL *)url
 {
-    @synchronized(imageURLs) {
-        [imageURLs addObject:url];
-
-        // Make sure the logo gets removed from the rotation.
-        if ([imageURLs containsObject:defaultImageURL])
-            [imageURLs removeObject:defaultImageURL];
-
-        [animator imageAdded: url];
+    @synchronized(_imageURLs) {
+        [_imageURLs addObject:url];
+        [animator imageAdded:url];
 
         // If some new images have come in, force the "oldest" one out.
         // It won't get displayed immediately, but it will get displayed eventually.
-        if ([imageURLs count] > MAX_IMAGES) {
-            [imageURLs removeObjectAtIndex:0];
+        if ([_imageURLs count] > MAX_IMAGES) {
+            [_imageURLs removeObjectAtIndex:0];
         }
     }
 }
@@ -145,7 +141,7 @@ static NSInteger const MAX_IMAGES = 20;
 
                                [config setEmail:emailField.stringValue];
                                [config setPassword:passwordField.stringValue];
-                               [self start];
+                               [self restart];
                            }
 
                           [[NSApplication sharedApplication] endSheet:configSheet];
@@ -177,18 +173,18 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (NSSet *)imageURLs
 {
-    return [imageURLs set];
+    NSLog(@"sup sup sup sup %@", _imageURLs);
+    return [_imageURLs set];
 }
 
 - (void)setupAnimator
 {
     if ([config isRiverMode])
-        animator = [[LVFloatingAnimator alloc] initWithLayer:self.layer];
+        animator = [[LVFloatingAnimator alloc] initWithView:self];
     else if ([config isSlideshowMode])
-        animator = [[LVFadeAnimator alloc] initWithLayer:self.layer];
+        animator = [[LVFadeAnimator alloc] initWithView:self];
 
     animator.delegate = self;
-    [animator imageAdded: nil];
 }
 
 - (void)setupTraverser
