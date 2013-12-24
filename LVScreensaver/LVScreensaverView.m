@@ -60,9 +60,18 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
         defaultImageURL = [[NSBundle bundleForClass:[self class]] URLForImageResource:defaultImageName];
         imageURLs = [NSMutableSet setWithObjects:defaultImageURL, nil];
 
-        animator = [[LVFadeAnimator alloc] initWithLayer:self.layer];
+        if (![defaults boolForKey:@"RiverMode"] && ![defaults boolForKey:@"SlideshowMode"]) {
+            [defaults setBool:YES forKey:@"RiverMode"];
+            [defaults synchronize];
+        }
+
+        if ([defaults boolForKey:@"RiverMode"])
+            animator = [[LVFloatingAnimator alloc] initWithLayer:self.layer];
+        else if ([defaults boolForKey:@"SlideshowMode"])
+            animator = [[LVFadeAnimator alloc] initWithLayer:self.layer];
+
         animator.delegate = self;
-        [animator imageAdded];
+        [animator imageAdded: nil];
     }
     
     return self;
@@ -70,13 +79,15 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 
 - (void)addImageURL:(NSURL *)url
 {
-    [imageURLs addObject:url];
+    @synchronized(imageURLs) {
+        [imageURLs addObject:url];
 
-    // Make sure the logo gets removed from the rotation.
-    if ([imageURLs containsObject:defaultImageURL])
-        [imageURLs removeObject:defaultImageURL];
+        // Make sure the logo gets removed from the rotation.
+        if ([imageURLs containsObject:defaultImageURL])
+            [imageURLs removeObject:defaultImageURL];
 
-    [animator imageAdded];
+        [animator imageAdded: url];
+    }
 }
 
 - (void)startAnimation
@@ -122,6 +133,12 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
     if ([defaults stringForKey:@"Password"])
         passwordField.stringValue = [defaults stringForKey:@"Password"];
 
+    if ([defaults integerForKey:@"RiverMode"])
+        [riverMode setState:NSOnState];
+
+    if ([defaults integerForKey:@"SlideshowMode"])
+        [slideshowMode setState:NSOnState];
+
     return configSheet;
 }
 
@@ -135,6 +152,10 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
     ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
 
     [spinner setHidden:NO];
+
+    [defaults setBool:riverMode.state       forKey:@"RiverMode"];
+    [defaults setBool:slideshowMode.state   forKey:@"SlideshowMode"];
+    [defaults synchronize];
 
     [client authenticateWithEmail:emailField.stringValue
                          password:passwordField.stringValue

@@ -14,6 +14,8 @@
 		A26329E41868CFA700F77B7D /* LVFadeAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329E21868CFA700F77B7D /* LVFadeAnimator.h */; };
 		A26329E51868CFA700F77B7D /* LVFadeAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329E31868CFA700F77B7D /* LVFadeAnimator.m */; };
 		A26329E71868D01900F77B7D /* LVAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329E61868D01900F77B7D /* LVAnimator.m */; };
+		A26329EB1868DA9000F77B7D /* LVFloatingAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = A26329E91868DA9000F77B7D /* LVFloatingAnimator.h */; };
+		A26329EC1868DA9000F77B7D /* LVFloatingAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = A26329EA1868DA9000F77B7D /* LVFloatingAnimator.m */; };
 		A293558B18666DD1008C5CD9 /* NSImage+ProportionalScaling.h in Headers */ = {isa = PBXBuildFile; fileRef = A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */; };
 		A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */ = {isa = PBXBuildFile; fileRef = A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */; };
 		A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */; };
@@ -35,6 +37,8 @@
 		A26329E21868CFA700F77B7D /* LVFadeAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVFadeAnimator.h; sourceTree = "<group>"; };
 		A26329E31868CFA700F77B7D /* LVFadeAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVFadeAnimator.m; sourceTree = "<group>"; };
 		A26329E61868D01900F77B7D /* LVAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVAnimator.m; sourceTree = "<group>"; };
+		A26329E91868DA9000F77B7D /* LVFloatingAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LVFloatingAnimator.h; sourceTree = "<group>"; };
+		A26329EA1868DA9000F77B7D /* LVFloatingAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LVFloatingAnimator.m; sourceTree = "<group>"; };
 		A293558918666DD1008C5CD9 /* NSImage+ProportionalScaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+ProportionalScaling.h"; sourceTree = "<group>"; };
 		A293558A18666DD1008C5CD9 /* NSImage+ProportionalScaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+ProportionalScaling.m"; sourceTree = "<group>"; };
 		A29355901866986F008C5CD9 /* NSImage+BitmapRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+BitmapRepresentation.h"; sourceTree = "<group>"; };
@@ -77,6 +81,8 @@
 				A26329E61868D01900F77B7D /* LVAnimator.m */,
 				A26329E21868CFA700F77B7D /* LVFadeAnimator.h */,
 				A26329E31868CFA700F77B7D /* LVFadeAnimator.m */,
+				A26329E91868DA9000F77B7D /* LVFloatingAnimator.h */,
+				A26329EA1868DA9000F77B7D /* LVFloatingAnimator.m */,
 			);
 			name = LVAnimators;
 			sourceTree = "<group>";
@@ -186,6 +192,7 @@
 				A29355921866986F008C5CD9 /* NSImage+BitmapRepresentation.h in Headers */,
 				A26329E01868CF1500F77B7D /* LVAnimator.h in Headers */,
 				A26329E41868CFA700F77B7D /* LVFadeAnimator.h in Headers */,
+				A26329EB1868DA9000F77B7D /* LVFloatingAnimator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +312,7 @@
 				A29842E018662F6B00CDB2D8 /* LVScreensaverView.m in Sources */,
 				A29355931866986F008C5CD9 /* NSImage+BitmapRepresentation.m in Sources */,
 				A293558C18666DD1008C5CD9 /* NSImage+ProportionalScaling.m in Sources */,
+				A26329EC1868DA9000F77B7D /* LVFloatingAnimator.m in Sources */,
 				A26329E71868D01900F77B7D /* LVAnimator.m in Sources */,
 				A26329E51868CFA700F77B7D /* LVFadeAnimator.m in Sources */,
 			);

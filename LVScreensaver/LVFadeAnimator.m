@@ -14,7 +14,8 @@ static NSTimeInterval const SECONDS_PER_DESIGN = 10.0;
 static NSTimeInterval const BLANK_SECONDS = 1.0;
 static NSTimeInterval const FADE_IN_SECONDS = 1.0;
 
-- (void)imageAdded {
+- (void)imageAdded:(NSURL *)imageURL
+{
     if (!self.delegate)
         return;
 
@@ -73,9 +74,10 @@ static NSTimeInterval const FADE_IN_SECONDS = 1.0;
     return group;
 }
 
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag {
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
     parentLayer.sublayers = nil;
-    [self imageAdded];
+    [self imageAdded:nil];
 }
 
 @end

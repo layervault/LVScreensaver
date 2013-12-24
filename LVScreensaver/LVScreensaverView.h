@@ -9,6 +9,7 @@
 #import <ScreenSaver/ScreenSaver.h>
 #import "LVTraverser.h"
 #import "LVFadeAnimator.h"
+#import "LVFloatingAnimator.h"
 
 @class LVCHTTPClient;
 
@@ -24,6 +25,11 @@ typedef enum {
     IBOutlet NSTextField *emailField;
     IBOutlet NSTextField *passwordField;
     IBOutlet NSProgressIndicator *spinner;
+    IBOutlet NSMatrix *modeMatrix;
+
+    IBOutlet NSButtonCell *riverMode;
+    IBOutlet NSButtonCell *slideshowMode;
+
     LVCHTTPClient *client;
     NSMutableSet *imageURLs;
     NSDate *thresholdDate;

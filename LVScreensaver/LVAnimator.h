@@ -21,7 +21,7 @@
 @property (nonatomic, weak) id <LVImageDelegate> delegate;
 
 - (id)initWithLayer:(CALayer *)layer;
-- (void)imageAdded;
+- (void)imageAdded:(NSURL *)imageURL;
 - (NSURL *)randomImageURL;
 - (CALayer *)sublayerWithImage:(NSImage *)image;
 - (CABasicAnimation *)fadeOutAnimation;
