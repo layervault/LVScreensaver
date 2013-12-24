@@ -19,6 +19,7 @@
     LVCHTTPClient *client;
     CGFloat width;
     CGFloat height;
+    NSMutableSet *projectNames;
 }
 
 @property (nonatomic, weak) id <LVTraverserDelegate> delegate;

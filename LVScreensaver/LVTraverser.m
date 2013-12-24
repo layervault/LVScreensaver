@@ -14,6 +14,8 @@
 
 @synthesize delegate;
 
+static NSTimeInterval const POLL_INTERVAL = 30.0;
+
 - (id)initWithClient:(LVCHTTPClient *)aClient andWidth:(CGFloat)aWidth andHeight:(CGFloat)aHeight
 {
     self = [super init];
@@ -22,6 +24,7 @@
         client = aClient;
         width = aWidth;
         height = aHeight;
+        projectNames = [NSMutableSet set];
     }
 
     return self;
@@ -34,17 +37,32 @@
                                   AFHTTPRequestOperation *operation) {
 
         for (LVCProject *project in user.projects) {
+            [projectNames addObject:@[project.name, project.organizationPermalink]];
+        }
+
+        for (NSArray *project in projectNames) {
             [self descendIntoProject:project newerThan:date];
         }
+
+        NSDate *currentTime = [NSDate date];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, POLL_INTERVAL * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self fetchImagesNewerThan:currentTime];
+        });
     }];
 }
 
-- (void)descendIntoProject:(LVCProject *)project newerThan:(NSDate *)date
+- (void)descendIntoProject:(NSArray *)projectArray newerThan:(NSDate *)date
 {
-    if ([project.dateUpdated compare:date] != NSOrderedDescending)
-        return;
+    LVCProject *project = [[LVCProject alloc] initWithName:projectArray.firstObject
+                                     organizationPermalink:projectArray.lastObject];
 
+    // So this is a significantly more expensive way to collect this information, since we have to issue a
+    // new request for every project. This is because the /me endpoint returns stale project data. Once
+    // that issue is remedied, we can get smarter about how we query this.
     [client getProjectFromPartial:project completion:^(LVCProject *project, NSError *error, AFHTTPRequestOperation *operation) {
+        if ([project.dateUpdated compare:date] != NSOrderedDescending)
+            return;
+
         for (LVCFile *file in project.files)
             [self descendIntoFile:file newerThan:date];
 

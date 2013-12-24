@@ -16,6 +16,7 @@ static NSString * const MyModuleName = @"com.layervault.LVScreensaver";
 static NSTimeInterval const FRAMES_PER_SECOND = 30.0;
 static NSString * const CLIENT_KEY = @"YOUR_CLIENT_KEY";
 static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
+static NSInteger const MAX_IMAGES = 20;
 
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
@@ -37,6 +38,12 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
             [imageURLs removeObject:defaultImageURL];
 
         [animator imageAdded: url];
+
+        // If some new images have come in, force the "oldest" one out.
+        // It won't get displayed immediately, but it will get displayed eventually.
+        if ([imageURLs count] > MAX_IMAGES) {
+            [imageURLs removeObjectAtIndex:0];
+        }
     }
 }
 
@@ -160,7 +167,7 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 
     NSString *defaultImageName = isPreview ? @"Small-Logo" : @"Logo";
     defaultImageURL = [[NSBundle bundleForClass:[self class]] URLForImageResource:defaultImageName];
-    imageURLs = [NSMutableSet setWithObjects:defaultImageURL, nil];
+    imageURLs = [[NSMutableOrderedSet alloc] initWithObject:defaultImageURL];
 
     [self setupTraverser];
     [self setupAnimator];
@@ -168,7 +175,7 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 
 - (NSSet *)imageURLs
 {
-    return imageURLs;
+    return [imageURLs set];
 }
 
 - (void)setupAnimator

@@ -31,7 +31,7 @@ typedef enum {
     IBOutlet NSButtonCell *slideshowMode;
 
     LVCHTTPClient *client;
-    NSMutableSet *imageURLs;
+    NSMutableOrderedSet *imageURLs;
     NSDate *thresholdDate;
 
     LVTraverser *traverser;
