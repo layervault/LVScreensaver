@@ -185,6 +185,9 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
         [defaults synchronize];
     }
 
+    self.layer.sublayers = nil;
+    [self.layer setNeedsDisplay];
+
     if ([defaults boolForKey:@"RiverMode"])
         animator = [[LVFloatingAnimator alloc] initWithLayer:self.layer];
     else if ([defaults boolForKey:@"SlideshowMode"])
