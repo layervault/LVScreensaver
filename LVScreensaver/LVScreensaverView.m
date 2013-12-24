@@ -21,57 +21,7 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *lastWeekComponents = [[NSDateComponents alloc] init];
-        NSDate *today = [NSDate date];
-        [lastWeekComponents setWeek:-1];
-        thresholdDate = [calendar dateByAddingComponents:lastWeekComponents toDate:today options:0];
-
-        ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
-
-        client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY secret:CLIENT_SECRET];
-        traverser = [[LVTraverser alloc] initWithClient:client
-                                               andWidth:[self bounds].size.width
-                                              andHeight:[self bounds].size.height];
-        traverser.delegate = self;
-
-        if ([defaults stringForKey:@"Email"]) {
-            [client authenticateWithEmail:[defaults stringForKey:@"Email"]
-                                 password:[defaults stringForKey:@"Password"]
-                               completion:^(AFOAuthCredential *credential, NSError *error) {
-                                   if (credential) {
-                                       // Save Credential to Keychain
-                                       [AFOAuthCredential storeCredential:credential
-                                                           withIdentifier:client.serviceProviderIdentifier];
-
-                                       // Set Authorization Header
-                                       [client setAuthorizationHeaderWithCredential:credential];
-                                       [traverser fetchImagesNewerThan:thresholdDate];
-                                   }
-                               }];
-
-        }
-
-        [self setWantsLayer:YES];
-        [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
-        [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
-
-        NSString *defaultImageName = isPreview ? @"Small-Logo" : @"Logo";
-        defaultImageURL = [[NSBundle bundleForClass:[self class]] URLForImageResource:defaultImageName];
-        imageURLs = [NSMutableSet setWithObjects:defaultImageURL, nil];
-
-        if (![defaults boolForKey:@"RiverMode"] && ![defaults boolForKey:@"SlideshowMode"]) {
-            [defaults setBool:YES forKey:@"RiverMode"];
-            [defaults synchronize];
-        }
-
-        if ([defaults boolForKey:@"RiverMode"])
-            animator = [[LVFloatingAnimator alloc] initWithLayer:self.layer];
-        else if ([defaults boolForKey:@"SlideshowMode"])
-            animator = [[LVFadeAnimator alloc] initWithLayer:self.layer];
-
-        animator.delegate = self;
-        [animator imageAdded: nil];
+        [self reloadIsPreview:isPreview];
     }
     
     return self;
@@ -149,6 +99,8 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 
 - (IBAction)okClick:(id)sender
 {
+    self.layer.sublayers = nil;
+    [self.layer setNeedsDisplay];
     ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
 
     [spinner setHidden:NO];
@@ -179,11 +131,83 @@ static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
                           [[NSApplication sharedApplication] endSheet:configSheet];
                        }
      ];
+
+    [self reloadIsPreview:YES];
+}
+
+- (void)reloadIsPreview:(BOOL)isPreview
+{
+    [self setWantsLayer:YES];
+    [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
+    [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
+
+    [self setupThresholdDate];
+
+    NSString *defaultImageName = isPreview ? @"Small-Logo" : @"Logo";
+    defaultImageURL = [[NSBundle bundleForClass:[self class]] URLForImageResource:defaultImageName];
+    imageURLs = [NSMutableSet setWithObjects:defaultImageURL, nil];
+
+    [self setupTraverser];
+    [self setupAnimator];
 }
 
 - (NSSet *)imageURLs
 {
     return imageURLs;
+}
+
+- (void)setupAnimator
+{
+    ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
+
+    if (![defaults boolForKey:@"RiverMode"] && ![defaults boolForKey:@"SlideshowMode"]) {
+        [defaults setBool:YES forKey:@"RiverMode"];
+        [defaults synchronize];
+    }
+
+    if ([defaults boolForKey:@"RiverMode"])
+        animator = [[LVFloatingAnimator alloc] initWithLayer:self.layer];
+    else if ([defaults boolForKey:@"SlideshowMode"])
+        animator = [[LVFadeAnimator alloc] initWithLayer:self.layer];
+
+    animator.delegate = self;
+    [animator imageAdded: nil];
+}
+
+- (void)setupTraverser
+{
+    ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
+
+    client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY secret:CLIENT_SECRET];
+    traverser = [[LVTraverser alloc] initWithClient:client
+                                           andWidth:[self bounds].size.width
+                                          andHeight:[self bounds].size.height];
+    traverser.delegate = self;
+
+    if ([defaults stringForKey:@"Email"]) {
+        [client authenticateWithEmail:[defaults stringForKey:@"Email"]
+                             password:[defaults stringForKey:@"Password"]
+                           completion:^(AFOAuthCredential *credential, NSError *error) {
+                               if (credential) {
+                                   // Save Credential to Keychain
+                                   [AFOAuthCredential storeCredential:credential
+                                                       withIdentifier:client.serviceProviderIdentifier];
+
+                                   // Set Authorization Header
+                                   [client setAuthorizationHeaderWithCredential:credential];
+                                   [traverser fetchImagesNewerThan:thresholdDate];
+                               }
+                           }];
+    }
+}
+
+- (void)setupThresholdDate
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *lastWeekComponents = [[NSDateComponents alloc] init];
+    NSDate *today = [NSDate date];
+    [lastWeekComponents setWeek:-1];
+    thresholdDate = [calendar dateByAddingComponents:lastWeekComponents toDate:today options:0];
 }
 
 @end
