@@ -19,16 +19,25 @@
 static void *LVScreensaverViewContext = &LVScreensaverViewContext;
 
 @interface LVScreensaverView ()  <LVTraverserDelegate, LVImageDelegate>
+@property (strong) IBOutlet id configSheet;
 @property (weak) IBOutlet NSTextField *emailField;
 @property (weak) IBOutlet NSTextField *passwordField;
 @property (weak) IBOutlet NSButton *loginButton;
 @property (weak) IBOutlet NSProgressIndicator *spinner;
+@property (weak) IBOutlet NSButtonCell *riverMode;
+@property (weak) IBOutlet NSButtonCell *slideshowMode;
 @property (nonatomic, readonly) LVCAuthenticatedClient *client;
 @property (nonatomic, readonly) LVTraverser *traverser;
 @property (nonatomic, readonly) LVCredentialTextLayer *credentialTextLayer;
 @end
 
-@implementation LVScreensaverView
+@implementation LVScreensaverView {
+    NSMutableOrderedSet *_imageURLs;
+    LVAnimator *animator;
+    NSURL *defaultImageURL;
+    LVConfiguration *config;
+}
+
 
 static NSString * const MyModuleName = @"com.layervault.LVScreensaver";
 static NSTimeInterval const FRAMES_PER_SECOND = 30.0;
@@ -132,7 +141,7 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (NSWindow*)configureSheet
 {
-    if (!configSheet) {
+    if (!self.configSheet) {
         if (![NSBundle loadNibNamed:@"ConfigureSheet" owner:self]) {
             NSLog( @"Failed to load configure sheet.");
             NSBeep();
@@ -142,15 +151,15 @@ static NSInteger const MAX_IMAGES = 20;
     [self updateSheetState];
 
     if ([config isRiverMode]) {
-        [riverMode setState:NSOnState];
-        [slideshowMode setState:NSOffState];
+        [self.riverMode setState:NSOnState];
+        [self.slideshowMode setState:NSOffState];
     }
     else if ([config isSlideshowMode]) {
-        [riverMode setState:NSOffState];
-        [slideshowMode setState:NSOnState];
+        [self.riverMode setState:NSOffState];
+        [self.slideshowMode setState:NSOnState];
     }
 
-    return configSheet;
+    return self.configSheet;
 }
 
 - (IBAction)loginPressed:(NSButton *)sender {
@@ -165,11 +174,6 @@ static NSInteger const MAX_IMAGES = 20;
         self.layer.sublayers = nil;
         [self.layer setNeedsDisplay];
 
-        if (riverMode.state)
-            [config setRiverMode];
-        else if (slideshowMode.state)
-            [config setSlideshowMode];
-
         [self stop];
         [self.client loginWithEmail:self.emailField.stringValue
                            password:self.passwordField.stringValue];
@@ -178,7 +182,14 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (IBAction)okClick:(id)sender
 {
-    [[NSApplication sharedApplication] endSheet:configSheet];
+    if (self.riverMode.state) {
+        [config setRiverMode];
+    }
+    else if (self.slideshowMode.state) {
+        [config setSlideshowMode];
+    }
+    
+    [[NSApplication sharedApplication] endSheet:self.configSheet];
 }
 
 

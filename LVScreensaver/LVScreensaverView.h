@@ -15,19 +15,6 @@
 @class LVConfiguration;
 
 @interface LVScreensaverView : ScreenSaverView
-{
-    IBOutlet id configSheet;
-
-    IBOutlet NSButtonCell *riverMode;
-    IBOutlet NSButtonCell *slideshowMode;
-
-    NSMutableOrderedSet *_imageURLs;
-
-    LVAnimator *animator;
-    NSURL *defaultImageURL;
-
-    LVConfiguration *config;
-}
 
 - (void)addImageURL:(NSURL *)url;
 - (NSSet *)imageURLs;
