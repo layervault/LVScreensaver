@@ -8,11 +8,25 @@
 
 #import "LVScreensaverView.h"
 
-#import <LayerVaultAPI.h>
+#import <LayerVaultAPI/LayerVaultAPI.h>
+#import <AFOAuth2Client/AFOAuth2Client.h>
 
 #import "LVCredentialTextLayer.h"
 #import "LVLogoLayer.h"
 #import "LVConfiguration.h"
+#import "LVTraverser.h"
+
+static void *LVScreensaverViewContext = &LVScreensaverViewContext;
+
+@interface LVScreensaverView ()  <LVTraverserDelegate, LVImageDelegate>
+@property (weak) IBOutlet NSTextField *emailField;
+@property (weak) IBOutlet NSTextField *passwordField;
+@property (weak) IBOutlet NSButton *loginButton;
+@property (weak) IBOutlet NSProgressIndicator *spinner;
+@property (nonatomic, readonly) LVCAuthenticatedClient *client;
+@property (nonatomic, readonly) LVTraverser *traverser;
+@property (nonatomic, readonly) LVCredentialTextLayer *credentialTextLayer;
+@end
 
 @implementation LVScreensaverView
 
@@ -22,16 +36,55 @@ static NSString * const CLIENT_KEY = @"YOUR_CLIENT_KEY";
 static NSString * const CLIENT_SECRET = @"YOUR_CLIENT_SECRET";
 static NSInteger const MAX_IMAGES = 20;
 
++ (NSDate *)thresholdDate
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *lastWeekComponents = [[NSDateComponents alloc] init];
+    NSDate *today = [NSDate date];
+    [lastWeekComponents setWeek:-1];
+    return [calendar dateByAddingComponents:lastWeekComponents toDate:today options:0];
+}
+
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
+        _client = [[LVCAuthenticatedClient alloc] initWithClientID:CLIENT_KEY
+                                                            secret:CLIENT_SECRET];
+
+        [_client addObserver:self
+                  forKeyPath:@"user"
+                     options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew
+                     context:LVScreensaverViewContext];
+        [_client addObserver:self
+                  forKeyPath:@"authenticationState"
+                     options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew
+                     context:LVScreensaverViewContext];
+
+        __weak typeof(self) wSelf = self;
+        _client.authenticationCallback = ^(LVCUser *user, NSError *error) {
+            __strong typeof(wSelf) sSelf = wSelf;
+            [sSelf removeCredentialsLayer];
+            [sSelf.traverser fetchImagesNewerThan:[LVScreensaverView thresholdDate]];
+        };
+
+        _traverser = [[LVTraverser alloc] initWithClient:self.client
+                                               andWidth:[self bounds].size.width
+                                              andHeight:[self bounds].size.height];
+        _traverser.delegate = self;
+
+        AFOAuthCredential *cred = [AFOAuthCredential retrieveCredentialWithIdentifier:_client.serviceProviderIdentifier];
+        if (cred) {
+            [_client loginWithCredential:cred];
+        }
+
         _imageURLs = [[NSMutableOrderedSet alloc] init];
         config = [[LVConfiguration alloc] init];
         [self setWantsLayer:YES];
         [self.layer setBackgroundColor:[[NSColor blackColor] CGColor]];
         [self setAnimationTimeInterval:1/FRAMES_PER_SECOND];
-        [self setupThresholdDate];
+
+        _credentialTextLayer = [[LVCredentialTextLayer alloc] initWithView:self];
 
         [self start];
     }
@@ -39,33 +92,31 @@ static NSInteger const MAX_IMAGES = 20;
     return self;
 }
 
+
+- (void)dealloc
+{
+    [_client removeObserver:self
+                 forKeyPath:@"user"
+                    context:LVScreensaverViewContext];
+    [_client removeObserver:self
+                 forKeyPath:@"authenticationState"
+                    context:LVScreensaverViewContext];
+}
+
 - (void)addImageURL:(NSURL *)url
 {
     @synchronized(_imageURLs) {
-        [_imageURLs addObject:url];
-        [animator imageAdded:url];
+        if (url) {
+            [_imageURLs addObject:url];
+            [animator imageAdded:url];
 
-        // If some new images have come in, force the "oldest" one out.
-        // It won't get displayed immediately, but it will get displayed eventually.
-        if ([_imageURLs count] > MAX_IMAGES) {
-            [_imageURLs removeObjectAtIndex:0];
+            // If some new images have come in, force the "oldest" one out.
+            // It won't get displayed immediately, but it will get displayed eventually.
+            if ([_imageURLs count] > MAX_IMAGES) {
+                [_imageURLs removeObjectAtIndex:0];
+            }
         }
     }
-}
-
-- (void)startAnimation
-{
-    [super startAnimation];
-}
-
-- (void)stopAnimation
-{
-    [super stopAnimation];
-}
-
-- (void)drawRect:(NSRect)rect
-{
-    [super drawRect:rect];
 }
 
 - (void)animateOneFrame
@@ -81,8 +132,6 @@ static NSInteger const MAX_IMAGES = 20;
 
 - (NSWindow*)configureSheet
 {
-    ScreenSaverDefaults *defaults = [ScreenSaverDefaults defaultsForModuleWithName:MyModuleName];
-
     if (!configSheet) {
         if (![NSBundle loadNibNamed:@"ConfigureSheet" owner:self]) {
             NSLog( @"Failed to load configure sheet.");
@@ -90,11 +139,7 @@ static NSInteger const MAX_IMAGES = 20;
         }
     }
 
-    if ([config email])
-        emailField.stringValue = [config email];
-
-    if ([config password])
-        passwordField.stringValue = [config password];
+    [self updateSheetState];
 
     if ([config isRiverMode]) {
         [riverMode setState:NSOnState];
@@ -108,57 +153,43 @@ static NSInteger const MAX_IMAGES = 20;
     return configSheet;
 }
 
-- (IBAction)cancelClick:(id)sender
-{
-    [[NSApplication sharedApplication] endSheet:configSheet];
+- (IBAction)loginPressed:(NSButton *)sender {
+    if (self.client.authenticationState == LVCAuthenticationStateAuthenticated) {
+        NSLog(@"logout called");
+        [self.client logout];
+        self.emailField.stringValue = @"";
+        self.passwordField.stringValue = @"";
+        [self.emailField becomeFirstResponder];
+    }
+    else if (self.client.authenticationState == LVCAuthenticationStateUnauthenticated) {
+        self.layer.sublayers = nil;
+        [self.layer setNeedsDisplay];
+
+        if (riverMode.state)
+            [config setRiverMode];
+        else if (slideshowMode.state)
+            [config setSlideshowMode];
+
+        [self stop];
+        [self.client loginWithEmail:self.emailField.stringValue
+                           password:self.passwordField.stringValue];
+    }
 }
 
 - (IBAction)okClick:(id)sender
 {
-    self.layer.sublayers = nil;
-    [self.layer setNeedsDisplay];
-
-    [spinner setHidden:NO];
-
-    if (riverMode.state)
-        [config setRiverMode];
-    else if (slideshowMode.state)
-        [config setSlideshowMode];
-
-    [self stop];
-    [client authenticateWithEmail:emailField.stringValue
-                         password:passwordField.stringValue
-                       completion:^(AFOAuthCredential *credential, NSError *error) {
-                           [spinner setHidden:YES];
-
-                           if (credential) {
-                               [self removeCredentialsLayer];
-
-                               // Save Credential to Keychain
-                               [AFOAuthCredential storeCredential:credential
-                                                   withIdentifier:client.serviceProviderIdentifier];
-
-                               // Set Authorization Header
-                               [client setAuthorizationHeaderWithCredential:credential];
-
-                               [config setEmail:emailField.stringValue];
-                               [config setPassword:passwordField.stringValue];
-                               [self start];
-                           }
-
-                          [[NSApplication sharedApplication] endSheet:configSheet];
-                       }
-     ];
+    [[NSApplication sharedApplication] endSheet:configSheet];
 }
+
 
 - (void)start
 {
     [self.layer addSublayer: [[LVLogoLayer alloc] initWithView:self]];
 
-    if (![config hasCredentials])
-        [self.layer addSublayer: [[LVCredentialTextLayer alloc] initWithView:self]];
+    if (self.client.authenticationState == LVCAuthenticationStateUnauthenticated) {
+        [self.layer addSublayer:self.credentialTextLayer];
+    }
 
-    [self setupTraverser];
     [self setupAnimator];
 }
 
@@ -167,12 +198,6 @@ static NSInteger const MAX_IMAGES = 20;
     self.layer.sublayers = nil;
     animator.delegate = nil;
     animator = nil;
-}
-
-- (void)restart
-{
-    [self stop];
-    [self start];
 }
 
 - (NSSet *)imageURLs
@@ -190,48 +215,55 @@ static NSInteger const MAX_IMAGES = 20;
     animator.delegate = self;
 }
 
-- (void)setupTraverser
+- (void)removeCredentialsLayer
 {
-    client = [[LVCHTTPClient alloc] initWithClientID:CLIENT_KEY secret:CLIENT_SECRET];
-    traverser = [[LVTraverser alloc] initWithClient:client
-                                           andWidth:[self bounds].size.width
-                                          andHeight:[self bounds].size.height];
-    traverser.delegate = self;
+    [self.credentialTextLayer fadeOut:nil];
+}
 
-    if ([config hasCredentials]) {
-        [client authenticateWithEmail:[config email]
-                             password:[config password]
-                           completion:^(AFOAuthCredential *credential, NSError *error) {
-                               if (credential) {
-                                   [self removeCredentialsLayer];
 
-                                   // Save Credential to Keychain
-                                   [AFOAuthCredential storeCredential:credential
-                                                       withIdentifier:client.serviceProviderIdentifier];
-
-                                   // Set Authorization Header
-                                   [client setAuthorizationHeaderWithCredential:credential];
-                                   [traverser fetchImagesNewerThan:thresholdDate];
-                               }
-                           }];
+- (void)updateSheetState
+{
+    if (self.client.authenticationState == LVCAuthenticationStateAuthenticating) {
+        [self.spinner startAnimation:nil];
+    }
+    else {
+        [self.spinner stopAnimation:nil];
+    }
+    self.emailField.stringValue = self.client.user.email ?: @"";
+    self.passwordField.stringValue = self.client.authenticationState == LVCAuthenticationStateUnauthenticated ? @"" : @"TEMPORARYPASSWORD";
+    switch (self.client.authenticationState) {
+        case LVCAuthenticationStateUnauthenticated:
+            self.loginButton.title = @"Login";
+            [self.loginButton setEnabled:YES];
+            [self.emailField setEnabled:YES];
+            [self.passwordField setEnabled:YES];
+            break;
+        case LVCAuthenticationStateAuthenticating:
+            self.loginButton.title = @"Logging In";
+            [self.loginButton setEnabled:NO];
+            [self.emailField setEnabled:NO];
+            [self.passwordField setEnabled:NO];
+            break;
+        case LVCAuthenticationStateAuthenticated:
+            self.loginButton.title = @"Logout";
+            [self.loginButton setEnabled:YES];
+            [self.emailField setEnabled:NO];
+            [self.passwordField setEnabled:NO];
+            break;
     }
 }
 
-- (void)setupThresholdDate
+#pragma mark - KVO
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
 {
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *lastWeekComponents = [[NSDateComponents alloc] init];
-    NSDate *today = [NSDate date];
-    [lastWeekComponents setWeek:-1];
-    thresholdDate = [calendar dateByAddingComponents:lastWeekComponents toDate:today options:0];
-}
-
-- (void)removeCredentialsLayer
-{
-    for (CALayer *layer in self.layer.sublayers) {
-        if ([layer isMemberOfClass:[LVCredentialTextLayer class]]) {
-            [(LVCredentialTextLayer *)layer fadeOut:^{}];
-        }
+    if (context == LVScreensaverViewContext) {
+        [self updateSheetState];
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 

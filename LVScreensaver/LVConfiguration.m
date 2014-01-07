@@ -12,8 +12,6 @@
 @implementation LVConfiguration
 
 static NSString * const MyModuleName = @"com.layervault.LVScreensaver";
-static NSString * const EMAIL_DEFAULTS_KEY = @"Email";
-static NSString * const PASSWORD_DEFAULTS_KEY = @"Password";
 static NSString * const RIVER_MODE_DEFAULTS_KEYS = @"RiverMode";
 static NSString * const SLIDESHOW_MODE_DEFAULTS_KEYS = @"SlideshowMode";
 
@@ -47,28 +45,6 @@ static NSString * const SLIDESHOW_MODE_DEFAULTS_KEYS = @"SlideshowMode";
     return [defaults boolForKey:SLIDESHOW_MODE_DEFAULTS_KEYS];
 }
 
-- (NSString *)email
-{
-    return [defaults stringForKey:EMAIL_DEFAULTS_KEY];
-}
-
-- (NSString *)password
-{
-    return [defaults stringForKey:PASSWORD_DEFAULTS_KEY];
-}
-
-- (BOOL)hasCredentials
-{
-    return [self email] && [self password];
-}
-
-- (void)eraseCredentials
-{
-    [defaults removeObjectForKey:EMAIL_DEFAULTS_KEY];
-    [defaults removeObjectForKey:PASSWORD_DEFAULTS_KEY];
-    [defaults synchronize];
-}
-
 - (void)setRiverMode
 {
     [defaults setBool:YES forKey:RIVER_MODE_DEFAULTS_KEYS];
@@ -80,18 +56,6 @@ static NSString * const SLIDESHOW_MODE_DEFAULTS_KEYS = @"SlideshowMode";
 {
     [defaults setBool:NO forKey:RIVER_MODE_DEFAULTS_KEYS];
     [defaults setBool:YES  forKey:SLIDESHOW_MODE_DEFAULTS_KEYS];
-    [defaults synchronize];
-}
-
-- (void)setEmail:(NSString *)email
-{
-    [defaults setValue:email forKey:EMAIL_DEFAULTS_KEY];
-    [defaults synchronize];
-}
-
-- (void)setPassword:(NSString *)password
-{
-    [defaults setValue:password forKey:PASSWORD_DEFAULTS_KEY];
     [defaults synchronize];
 }
 

@@ -7,29 +7,22 @@
 //
 
 #import <ScreenSaver/ScreenSaver.h>
-#import "LVTraverser.h"
+
 #import "LVFadeAnimator.h"
 #import "LVFloatingAnimator.h"
 
 @class LVCHTTPClient;
 @class LVConfiguration;
 
-@interface LVScreensaverView : ScreenSaverView <LVTraverserDelegate, LVImageDelegate>
+@interface LVScreensaverView : ScreenSaverView
 {
     IBOutlet id configSheet;
-    IBOutlet NSTextField *emailField;
-    IBOutlet NSTextField *passwordField;
-    IBOutlet NSProgressIndicator *spinner;
-    IBOutlet NSMatrix *modeMatrix;
 
     IBOutlet NSButtonCell *riverMode;
     IBOutlet NSButtonCell *slideshowMode;
 
-    LVCHTTPClient *client;
     NSMutableOrderedSet *_imageURLs;
-    NSDate *thresholdDate;
 
-    LVTraverser *traverser;
     LVAnimator *animator;
     NSURL *defaultImageURL;
 
