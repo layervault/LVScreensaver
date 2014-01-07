@@ -1,3 +1,3 @@
 target "LVScreensaver" do
-  pod "LayerVaultAPI", :head
+  pod 'LayerVaultAPI', '~> 0.2.0'
 end
