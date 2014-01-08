@@ -19,11 +19,4 @@
 - (BOOL)isRiverMode;
 - (BOOL)isSlideshowMode;
 
-- (NSString *)email;
-- (NSString *)password;
-- (void)setEmail:(NSString *)email;
-- (void)setPassword:(NSString *)password;
-- (BOOL)hasCredentials;
-- (void)eraseCredentials;
-
 @end
