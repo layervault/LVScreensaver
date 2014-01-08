@@ -89,7 +89,7 @@ static NSTimeInterval const POLL_INTERVAL = 30.0;
         return;
 
     [client getPreviewURLsForFile:file width:width height:height completion:^(NSArray *previewURLs, NSError *error, AFHTTPRequestOperation *operation) {
-        if (self.delegate)
+        if (self.delegate && [previewURLs count])
             [self.delegate addImageURL:[previewURLs objectAtIndex:([previewURLs count] - 1)]];
     }];
 }
